@@ -3,3 +3,4 @@ pandas
 numpy
 streamlit-card
 plotly-express
+pybase64
