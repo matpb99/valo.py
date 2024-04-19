@@ -5,7 +5,7 @@ import plotly.express as px
 from streamlit_card import card
 import base64
 
-st.set_page_config(layout="wide",initial_sidebar_state="expanded")
+st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
 
 
 def load_image(filename, folder):
@@ -21,7 +21,7 @@ def load_image(filename, folder):
 
 
 st.header('Valo.py', divider='blue')
-st.subheader('_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] ')
+st.subheader('_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] Last Update: ')
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -32,32 +32,48 @@ st.title("Top Players")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
+    with st.container(border=True):
 
-    most_rating = pd.read_csv("./outputs/players/most_rating.csv")
+        most_rating = pd.read_csv("./outputs/players/most_rating.csv")
 
-    player, rating = most_rating["Name"][0], most_rating["Rating"][0]
-  
-    player_rating = card(
-    title = str(player).capitalize(),
-    text = [str(rating)+" Rating", "Most Rating in All VCTs"],
-    image = load_image(player, "players"),
-    )
+        player, rating = most_rating["Name"][0], most_rating["Rating"][0]
     
-    st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
+        player_rating = card(
+        title = str(player).capitalize(),
+        text = [str(rating)+" Rating", "Most Rating in All VCTs"],
+        image = load_image(player, "players"),
+        styles={
+            "card": {
+                "width": "100%",
+                "height": "500px"
+                    }
+        }
+        )
+        
+        st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
 
 with col2:
+    with st.container(border=True):
 
-    most_acs = pd.read_csv("./outputs/players/most_acs.csv")
+        most_acs = pd.read_csv("./outputs/players/most_acs.csv")
 
-    player, acs = most_acs["Name"][0], most_acs["ACS"][0]
-  
-    player_acs = card(
-    title = str(player).capitalize(),
-    text = [str(acs)+" ACS", "Most Average Combat Score in All VCTs"],
-    image = load_image(player, "players")
-    )
+        player, acs = most_acs["Name"][0], most_acs["ACS"][0]
+    
+        player_acs = card(
+        title = str(player).capitalize(),
+        text = [str(acs)+" ACS", "Most Average Combat Score in All VCTs"],
+        image = load_image(player, "players"),
+        styles={
+            "card": {
+                "width": "100%",
+                "height": "500px"
+                    }
+                }
+                        )
 
-    st.dataframe(most_acs.head(5), hide_index=True, use_container_width=True)
+        with st.expander("Show Ranking"):
+    
+            st.dataframe(most_acs.head(5), hide_index=True, use_container_width=True)
 
 with col3:
     
@@ -68,7 +84,13 @@ with col3:
     player_kills = card(
     title = str(player).capitalize(),
     text = [str(kills)+" Kills", "Most Kills in All VCTs"],
-    image = load_image(player, "players")
+    image = load_image(player, "players"),
+    styles={
+        "card": {
+            "width": "100%",
+            "height": "300px"
+                }
+    }
     )
 
     st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
@@ -82,7 +104,13 @@ with col4:
     player_assists = card(
     title = str(player).capitalize(),
     text = [str(assists)+" Assists", "Most Assists in All VCTs"],
-    image = load_image(player, "players")
+    image = load_image(player, "players"),
+    styles={
+        "card": {
+            "width": "100%",
+            "height": "300px"
+                }
+    }
     )
 
     st.dataframe(most_assists.head(5), hide_index=True, use_container_width=True)
