@@ -45,7 +45,7 @@ with col1:
         styles={
             "card": {
                 "width": "100%",
-                "height": "500px"
+                "height": "400px"
                     }
         }
         )
@@ -76,44 +76,45 @@ with col2:
             st.dataframe(most_acs.head(5), hide_index=True, use_container_width=True)
 
 with col3:
+    with st.container(border=True):
     
-    most_kills = pd.read_csv("./outputs/players/most_kills.csv")
+        most_kills = pd.read_csv("./outputs/players/most_kills.csv")
 
-    player, kills = most_kills["Name"][0], most_kills["Kills"][0]
-  
-    player_kills = card(
-    title = str(player).capitalize(),
-    text = [str(kills)+" Kills", "Most Kills in All VCTs"],
-    image = load_image(player, "players"),
-    styles={
-        "card": {
-            "width": "100%",
-            "height": "300px"
-                }
-    }
-    )
+        player, kills = most_kills["Name"][0], most_kills["Kills"][0]
+    
+        player_kills = card(
+        title = str(player).capitalize(),
+        text = [str(kills)+" Kills", "Most Kills in All VCTs"],
+        image = load_image(player, "players"),
+        styles={
+            "card": {
+                "width": "100%",
+                "height": "450px"
+                    }
+        }
+        )
 
-    st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
+        st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
 
 with col4:
+    with st.container(border=True):
+        most_assists = pd.read_csv("./outputs/players/most_assists.csv")
+
+        player, assists = most_assists["Name"][0], most_assists["Assists"][0]
     
-    most_assists = pd.read_csv("./outputs/players/most_assists.csv")
+        player_assists = card(
+        title = str(player).capitalize(),
+        text = [str(assists)+" Assists", "Most Assists in All VCTs"],
+        image = load_image(player, "players"),
+        styles={
+            "card": {
+                "width": "100%",
+                "height": "500px"
+                    }
+        }
+        )
 
-    player, assists = most_assists["Name"][0], most_assists["Assists"][0]
-  
-    player_assists = card(
-    title = str(player).capitalize(),
-    text = [str(assists)+" Assists", "Most Assists in All VCTs"],
-    image = load_image(player, "players"),
-    styles={
-        "card": {
-            "width": "100%",
-            "height": "300px"
-                }
-    }
-    )
-
-    st.dataframe(most_assists.head(5), hide_index=True, use_container_width=True)
+        st.dataframe(most_assists.head(5), hide_index=True, use_container_width=True)
 
 
 ###############################################################################################################################################################################################################
@@ -134,7 +135,13 @@ with col5:
     team_rating = card(
     title = str(team).upper(),
     text = [str(rating)+" Rating", "Most Team Rating in All VCTs"],
-    image = load_image(team, "teams")
+    image = load_image(team, "teams"),
+    styles={
+        "card": {
+            "width": "100%",
+            "height": "500px"
+                }
+    }
     )
 
     st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
@@ -148,7 +155,13 @@ with col6:
     team_acs = card(
     title = str(team).upper(),
     text = [str(acs)+" ACS", "Most Team Average Combat Score in All VCTs"],
-    image = load_image(team, "teams")
+    image = load_image(team, "teams"),
+    styles={
+        "card": {
+            "width": "100%",
+            "height": "500px"
+                }
+    }
     )
 
     st.dataframe(most_acs.head(5), hide_index=True, use_container_width=True)
@@ -162,7 +175,13 @@ with col7:
     team_kills = card(
     title = str(team).upper(),
     text = [str(kills)+" Kills", "Most Team Kills in All VCTs"],
-    image = load_image(team, "teams")
+    image = load_image(team, "teams"),
+    styles={
+        "card": {
+            "width": "100%",
+            "height": "400px"
+                }
+    }
     )
 
     st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
