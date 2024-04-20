@@ -26,7 +26,6 @@ card_list = list()
 def display_card_table(category1,category2,category3):
 
     df_data =  pd.read_csv("./outputs/{}/{}/{}.csv".format(category1,category2,category3))
-
     category_key_value = translate_dict.get(category3)
 
     if category2=="players":
