@@ -13,12 +13,11 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-   
-def display_card_table3(df_data,category2):
+def display_card_table3(df_data,category):
 
-    category_key_value = translate_dict.get(category2)
+    category_key_value = translate_dict.get(category)
 
-    teams, value, date = df_data["MatchTeams"][0], df_data[category_key_value][0], df_data["Date"][0]
+    teams, value = df_data["MatchTeams"][0], df_data[category_key_value][0]
 
     text = [str(value) + " {}".format(category_key_value), "Most Average {} by Both Teams in All VCTs".format(category_key_value)]
     title = str(teams).upper()
@@ -35,7 +34,6 @@ def display_card_table3(df_data,category2):
                 }
                             )
     )
-
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
@@ -88,3 +86,33 @@ with col1:
         LIMIT 5;"""
         match_average_rating_overall = pd.read_sql(sql_query, conn)
         display_card_table3(match_average_rating_overall,"most_rating")
+
+with col2:
+    with st.container(border=True):
+        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, ROUND(AVG(ACS),3) AS ACS, Date
+        FROM test_data
+        GROUP BY MatchKey
+        ORDER BY AVG(ACS) DESC
+        LIMIT 5;"""
+        match_average_acs_overall = pd.read_sql(sql_query, conn)
+        display_card_table3(match_average_acs_overall,"most_acs")
+
+with col3:
+    with st.container(border=True):
+        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, SUM(Kills) AS Kills, Date
+        FROM test_data
+        GROUP BY MatchKey
+        ORDER BY AVG(Kills) DESC
+        LIMIT 5;"""
+        match_kills_overall = pd.read_sql(sql_query, conn)
+        display_card_table3(match_kills_overall,"most_kills")
+
+with col4:
+    with st.container(border=True):
+        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, ROUND(AVG(HSRate),3) AS HSRate, Date
+        FROM test_data
+        GROUP BY MatchKey
+        ORDER BY AVG(HSRate) DESC
+        LIMIT 5;"""
+        match_average_hs_overall = pd.read_sql(sql_query, conn)
+        display_card_table3(match_average_hs_overall,"most_hs")
