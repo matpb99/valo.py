@@ -50,7 +50,7 @@ def display_card_table(df_data,category1,category2,category3):
         styles={
             "card": {
                 "width": "100%",
-                "height": "500px"
+                "height": "450px"
                     }
                 }
                             )
@@ -467,7 +467,6 @@ with col15:
 
         display_card_table(player_hs_map,"maps","players","most_hs")
 
-
 with col16:
     with st.container(border=True):
         sql_query = """SELECT Name, ROUND(FirstKills,2) AS FirstKills, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
@@ -489,19 +488,49 @@ col17, col18, col19, col20 = st.columns(4)
 
 with col17:
     with st.container(border=True):
-        display_card_table("maps","teams","most_rating")
+        sql_query = """SELECT Team, ROUND(AVG(Rating),2) AS Rating, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY AVG(Rating) DESC
+        LIMIT 5;"""
+
+        team_average_rating_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_average_rating_map,"maps","teams","most_rating")
 
 with col18:
     with st.container(border=True):
-        display_card_table("maps","teams","most_kills")
+        sql_query = """SELECT Team, SUM(Kills) AS Kills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY SUM(Kills) DESC
+        LIMIT 5;"""
+
+        team_kills_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_kills_map,"maps","teams","most_kills")
 
 with col19:
     with st.container(border=True):
-        display_card_table("maps","teams","most_hs")
+        sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY AVG(HSRate) DESC
+        LIMIT 5;"""
+
+        team_average_hs_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_average_hs_map,"maps","teams","most_hs")
+
         
 with col20:
     with st.container(border=True):
-        display_card_table("maps","teams","most_fk")
+        sql_query = """SELECT Team, SUM(FirstKills) AS FirstKills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY SUM(FirstKills) DESC
+        LIMIT 5;"""
+
+        team_fk_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_fk_map,"maps","teams","most_fk")
+
         
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
