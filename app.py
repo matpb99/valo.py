@@ -1,9 +1,10 @@
+import base64
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
 from streamlit_card import card
-import base64
+from sqlite3 import connect
 
 def load_image(filename, folder):
     with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
@@ -12,33 +13,21 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-translate_dict = {
-    "most_acs": "ACS",
-    "most_adr": "ADR",
-    "most_assists": "Assists",
-    "most_fk": "First Kills",
-    "most_hs": "HS Rate",
-    "most_kast":"Kast",
-    "most_kills":"Kills",
-    "most_rating": "Rating"
-}
-
-card_list = list()
-
 def display_card_table(category1,category2,category3):
 
     df_data =  pd.read_csv("./outputs/{}/{}/{}.csv".format(category1,category2,category3))
+
     category_key_value = translate_dict.get(category3)
 
-    if category2=="players":
+    if category2 == "players":
         category_key = "Name"
     else:
         category_key = "Team"
 
-    if category1=="maps":
+    if category1 == "maps":
         category, value, map_name, matchteams =  df_data[category_key][0], df_data[category_key_value][0], df_data["Map"][0], df_data["MatchTeams"][0]
 
-    elif category1=="matches":
+    elif category1 == "matches":
         category, value, matchteams = df_data[category_key][0], df_data[category_key_value][0], df_data["MatchTeams"][0]
 
     if category1 == "maps":
@@ -72,9 +61,8 @@ def display_card_table(category1,category2,category3):
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
     
-def display_card_table2(category1,category2):
+def display_card_table2(df_data,category1,category2):
 
-    df_data =  pd.read_csv("./outputs/{}/{}.csv".format(category1,category2))
     category_key_value = translate_dict.get(category2)
 
     if category1=="players":
@@ -107,11 +95,27 @@ def display_card_table2(category1,category2):
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
+st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
+
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 
-st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
+translate_dict = {
+    "most_acs" : "ACS",
+    "most_adr" : "ADR",
+    "most_assists" : "Assists",
+    "most_fk" : "FirstKills",
+    "most_hs" : "HSRate",
+    "most_kast" : "Kast",
+    "most_kills" : "Kills",
+    "most_rating" : "Rating"
+}
+card_list = list()
+
+players_maps_data_df = pd.read_csv("player_data_by_map2.csv")
+conn = connect(':memory:')
+players_maps_data_df.to_sql(name='test_data', con=conn)
 
 with open("last_update.txt", "r") as archivo:
     last_update = archivo.read()
@@ -130,19 +134,49 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     with st.container(border=True):
-        display_card_table2("players","most_rating")
+        sql_query = """SELECT Name, ROUND(AVG(Rating),2) AS Rating, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(Rating) DESC
+        LIMIT 5;"""
+        player_average_rating_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_rating_overall,"players","most_rating")
 
 with col2:
     with st.container(border=True):
-        display_card_table2("players","most_acs")
+        sql_query = """SELECT Name, ROUND(AVG(ACS),2) AS ACS, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(ACS) DESC
+        LIMIT 5;"""
+        player_average_acs_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_acs_overall,"players","most_acs")
 
 with col3:
     with st.container(border=True):
-        display_card_table2("players","most_kills")
+        sql_query = """SELECT Name, ROUND(AVG(Kills),2) AS Kills, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(Kills) DESC
+        LIMIT 5;"""
+        player_average_kills_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_kills_overall,"players","most_kills")
+
 
 with col4:
     with st.container(border=True):
-        display_card_table2("players","most_assists")
+
+        sql_query = """SELECT Name, ROUND(AVG(Assists),2) AS Assists, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(Assists) DESC
+        LIMIT 5;"""
+        player_average_assists_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_assists_overall,"players","most_assists")
 
 col21, col22, col23, col24 = st.columns(4)
 
