@@ -13,74 +13,20 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def display_card_table(df_data,category1,category2,category3):
-
-    category_key_value = translate_dict.get(category3)
-
-    if category2 == "players":
-        category_key = "Name"
-    else:
-        category_key = "Team"
-
-    if category1 == "maps":
-        category, value, map_name, matchteams =  df_data[category_key][0], df_data[category_key_value][0], df_data["Map"][0], df_data["MatchTeams"][0]
-
-    elif category1 == "matches":
-        category, value, matchteams = df_data[category_key][0], df_data[category_key_value][0], df_data["MatchTeams"][0]
-
-    if category1 == "maps":
-        if category2 == "players":
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map in All VCTs".format(category_key_value), map_name, matchteams]
-            title = str(category).capitalize()
-        else:
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map by Teams in All VCTs".format(category_key_value), map_name, matchteams]
-            title = str(category).upper()
-    else:
-        if category2 == "players":
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Match in All VCTs".format(category_key_value), matchteams]
-            title = str(category).capitalize()
-        else:
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Match by Teams in All VCTs".format(category_key_value), matchteams]
-            title = str(category).upper()
-
-    card_list.append(card(
-        title = title,
-        text = text,
-        image = load_image(category, category2),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "400px"
-                    }
-                }
-                            )
-    )
-
-    st.header("Top 5 Ranking")
-    st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
    
-def display_card_table2(df_data,category1,category2):
+def display_card_table3(df_data,category2):
 
     category_key_value = translate_dict.get(category2)
 
-    if category1=="players":
-        category_key = "Name"
-    else:
-        category_key = "Team"
+    teams, value, date = df_data["MatchTeams"][0], df_data[category_key_value][0], df_data["Date"][0]
 
-    category, value = df_data[category_key][0], df_data[category_key_value][0]
-
-    if category1 == "players":
-        text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played in All VCTs".format(category_key_value)]
-        title = str(category).capitalize()
-    else:
-        text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played by Teams in All VCTs".format(category_key_value)]
-        title = str(category).upper()
+    text = [str(value) + " {}".format(category_key_value), "Most Average {} by Both Teams in All VCTs".format(category_key_value)]
+    title = str(teams).upper()
 
     card_list.append(card(
         title = title,
         text = text,
-        image = load_image(category, category1),
+        #image = load_image(category, category1),
         styles={
             "card": {
                 "width": "100%",
@@ -130,3 +76,15 @@ st.subheader("_Last Update:_ :green[{}]".format(last_update))
 ###############################################################################################################################################################################################################
 
 st.title("Top Matches")
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    with st.container(border=True):
+        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, ROUND(AVG(Rating),3) AS Rating, Date
+        FROM test_data
+        GROUP BY MatchKey
+        ORDER BY AVG(Rating) DESC
+        LIMIT 5;"""
+        match_average_rating_overall = pd.read_sql(sql_query, conn)
+        display_card_table3(match_average_rating_overall,"most_rating")
