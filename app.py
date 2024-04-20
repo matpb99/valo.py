@@ -401,7 +401,6 @@ with col30:
 
         display_card_table(player_average_adr_match,"matches","players","most_adr")
 
-
 with col31:
     with st.container(border=True):
         sql_query = """SELECT Name, SUM(Assists) AS Assists, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
@@ -413,7 +412,6 @@ with col31:
         player_assists_match = pd.read_sql(sql_query, conn)
 
         display_card_table(player_assists_match,"matches","players","most_assists")
-
 
 with col32:
     with st.container(border=True):
@@ -438,19 +436,48 @@ col13, col14, col15, col16 = st.columns(4)
 
 with col13:
     with st.container(border=True):
-        display_card_table("maps","players","most_rating")
+        sql_query = """SELECT Name, ROUND(Rating,2) AS Rating, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        ORDER BY Rating DESC
+        LIMIT 5;"""
+
+        player_rating_map = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_rating_map,"maps","players","most_rating")
 
 with col14:
     with st.container(border=True):
-        display_card_table("maps","players","most_kills")
+        sql_query = """SELECT Name, ROUND(Kills,2) AS Kills, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        ORDER BY Kills DESC
+        LIMIT 5;"""
+
+        player_kills_map = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_kills_map,"maps","players","most_kills")
 
 with col15:
     with st.container(border=True):
-        display_card_table("maps","players","most_hs")
+        sql_query = """SELECT Name, ROUND(HSRate,2) AS HSRate, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        ORDER BY HSRate DESC
+        LIMIT 5;"""
+
+        player_hs_map = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_hs_map,"maps","players","most_hs")
+
 
 with col16:
     with st.container(border=True):
-        display_card_table("maps","players","most_fk")
+        sql_query = """SELECT Name, ROUND(FirstKills,2) AS FirstKills, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        ORDER BY FirstKills DESC
+        LIMIT 5;"""
+
+        player_fk_map = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_fk_map,"maps","players","most_fk")
         
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
