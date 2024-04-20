@@ -12,41 +12,30 @@ def load_image(filename, folder):
         encoded = base64.b64encode(data)
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
-
-def display_card_table(df_data,category1,category2,category3):
+#Detalle
+def display_card_table(df_data,category1,category3):
 
     category_key_value = translate_dict.get(category3)
 
-    if category2 == "players":
-        category_key = "Name"
+    if category_key_value == "FirstKills" or category_key_value == "Kills" or category_key_value == "Assists":
+        prefix = ""
     else:
-        category_key = "Team"
+        prefix = "Average "
 
     if category1 == "maps":
-        category, value, map_name, matchteams =  df_data[category_key][0], df_data[category_key_value][0], df_data["Map"][0], df_data["MatchTeams"][0]
+        team, value, map_name, matchteams =  df_data["Team"][0], df_data[category_key_value][0], df_data["Map"][0], df_data["MatchTeams"][0]
+        text = [str(value) +" {}".format(category_key_value), "Most {}{} in One Single Map by Teams in All VCTs".format(prefix, category_key_value), map_name, matchteams]
+        title = str(team).upper()
 
     elif category1 == "matches":
-        category, value, matchteams = df_data[category_key][0], df_data[category_key_value][0], df_data["MatchTeams"][0]
-
-    if category1 == "maps":
-        if category2 == "players":
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map in All VCTs".format(category_key_value), map_name, matchteams]
-            title = str(category).capitalize()
-        else:
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map by Teams in All VCTs".format(category_key_value), map_name, matchteams]
-            title = str(category).upper()
-    else:
-        if category2 == "players":
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Match in All VCTs".format(category_key_value), matchteams]
-            title = str(category).capitalize()
-        else:
-            text = [str(value) +" {}".format(category_key_value), "Most {} in One Match by Teams in All VCTs".format(category_key_value), matchteams]
-            title = str(category).upper()
+        team, value, matchteams = df_data["Team"][0], df_data[category_key_value][0], df_data["MatchTeams"][0]
+        text = [str(value) +" {}".format(category_key_value), "Most {}{} in One Match by Teams in All VCTs".format(prefix, category_key_value), matchteams]
+        title = str(team).upper()
 
     card_list.append(card(
         title = title,
         text = text,
-        image = load_image(category, category2),
+        image = load_image(team, "teams"),
         styles={
             "card": {
                 "width": "100%",
@@ -58,29 +47,20 @@ def display_card_table(df_data,category1,category2,category3):
 
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
-   
-def display_card_table2(df_data,category1,category2):
+## General   
+def display_card_table2(df_data,category2):
 
     category_key_value = translate_dict.get(category2)
 
-    if category1=="players":
-        category_key = "Name"
-    else:
-        category_key = "Team"
+    team, value = df_data["Team"][0], df_data[category_key_value][0]
 
-    category, value = df_data[category_key][0], df_data[category_key_value][0]
-
-    if category1 == "players":
-        text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played in All VCTs".format(category_key_value)]
-        title = str(category).capitalize()
-    else:
-        text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played by Teams in All VCTs".format(category_key_value)]
-        title = str(category).upper()
+    text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played by Teams in All VCTs".format(category_key_value)]
+    title = str(team).upper()
 
     card_list.append(card(
         title = title,
         text = text,
-        image = load_image(category, category1),
+        image = load_image(team, "teams"),
         styles={
             "card": {
                 "width": "100%",
@@ -131,9 +111,9 @@ st.subheader("_Last Update:_ :green[{}]".format(last_update))
 
 st.title("Top Teams")
 
-col5, col6, col7, col8 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4)
 
-with col5:
+with col1:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(Rating),2) AS Rating
         FROM test_data
@@ -142,9 +122,9 @@ with col5:
         LIMIT 5;"""
         team_average_hs_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_hs_overall,"teams","most_rating")
+        display_card_table2(team_average_hs_overall,"most_rating")
 
-with col6:
+with col2:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(ACS),2) AS ACS
         FROM test_data
@@ -153,9 +133,9 @@ with col6:
         LIMIT 5;"""
         team_average_acss_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_acss_overall,"teams","most_acs")
+        display_card_table2(team_average_acss_overall,"most_acs")
 
-with col7:
+with col3:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(Kills),2) AS Kills
         FROM test_data
@@ -164,9 +144,9 @@ with col7:
         LIMIT 5;"""
         team_average_kills_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_kills_overall,"teams","most_kills")
+        display_card_table2(team_average_kills_overall,"most_kills")
 
-with col8:
+with col4:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(Assists),2) AS Assists
         FROM test_data
@@ -175,11 +155,11 @@ with col8:
         LIMIT 5;"""
         team_average_assists_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_assists_overall,"teams","most_assists")
+        display_card_table2(team_average_assists_overall,"most_assists")
 
-col25, col26, col27, col28 = st.columns(4)
+col5, col6, col7, col8 = st.columns(4)
 
-with col25:
+with col5:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(Kast),2) AS Kast
         FROM test_data
@@ -188,9 +168,9 @@ with col25:
         LIMIT 5;"""
         team_average_kast_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_kast_overall,"teams","most_kast")
+        display_card_table2(team_average_kast_overall,"most_kast")
 
-with col26:
+with col6:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(ADR),2) AS ADR
         FROM test_data
@@ -199,9 +179,9 @@ with col26:
         LIMIT 5;"""
         team_average_adr_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_adr_overall,"teams","most_adr")
+        display_card_table2(team_average_adr_overall,"most_adr")
     
-with col27:
+with col7:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(FirstKills),2) AS FirstKills
         FROM test_data
@@ -210,9 +190,9 @@ with col27:
         LIMIT 5;"""
         team_average_fk_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_fk_overall,"teams","most_fk")
+        display_card_table2(team_average_fk_overall,"most_fk")
 
-with col28:
+with col8:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate
         FROM test_data
@@ -221,7 +201,7 @@ with col28:
         LIMIT 5;"""
         team_average_hs_overall = pd.read_sql(sql_query, conn)
 
-        display_card_table2(team_average_hs_overall,"teams","most_hs")
+        display_card_table2(team_average_hs_overall,"most_hs")
     
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -229,9 +209,9 @@ with col28:
 
 st.title("Top Teams in One Single Map")
 
-col17, col18, col19, col20 = st.columns(4)
+col9, col10, col11, col12 = st.columns(4)
 
-with col17:
+with col9:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(Rating),2) AS Rating, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
         FROM test_data
@@ -240,9 +220,9 @@ with col17:
         LIMIT 5;"""
 
         team_average_rating_map = pd.read_sql(sql_query, conn)
-        display_card_table(team_average_rating_map,"maps","teams","most_rating")
+        display_card_table(team_average_rating_map,"maps","most_rating")
 
-with col18:
+with col10:
     with st.container(border=True):
         sql_query = """SELECT Team, SUM(Kills) AS Kills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
         FROM test_data
@@ -251,9 +231,9 @@ with col18:
         LIMIT 5;"""
 
         team_kills_map = pd.read_sql(sql_query, conn)
-        display_card_table(team_kills_map,"maps","teams","most_kills")
+        display_card_table(team_kills_map,"maps","most_kills")
 
-with col19:
+with col11:
     with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
         FROM test_data
@@ -262,9 +242,9 @@ with col19:
         LIMIT 5;"""
 
         team_average_hs_map = pd.read_sql(sql_query, conn)
-        display_card_table(team_average_hs_map,"maps","teams","most_hs")
+        display_card_table(team_average_hs_map,"maps","most_hs")
       
-with col20:
+with col12:
     with st.container(border=True):
         sql_query = """SELECT Team, SUM(FirstKills) AS FirstKills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
         FROM test_data
@@ -273,7 +253,7 @@ with col20:
         LIMIT 5;"""
 
         team_fk_map = pd.read_sql(sql_query, conn)
-        display_card_table(team_fk_map,"maps","teams","most_fk")
+        display_card_table(team_fk_map,"maps","most_fk")
 
         
 ###############################################################################################################################################################################################################

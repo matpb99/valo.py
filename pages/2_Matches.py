@@ -17,9 +17,14 @@ def display_card_table3(df_data,category):
 
     category_key_value = translate_dict.get(category)
 
+    if category_key_value == "FirstKills" or category_key_value == "Kills" or category_key_value == "Assists":
+        prefix = ""
+    else:
+        prefix = "Average "
+
     teams, value = df_data["MatchTeams"][0], df_data[category_key_value][0]
 
-    text = [str(value) + " {}".format(category_key_value), "Most Average {} by Both Teams in All VCTs".format(category_key_value)]
+    text = [str(value) + " {}".format(category_key_value), "Most {}{} by Both Teams in All VCTs".format(prefix, category_key_value)]
     title = str(teams).upper()
 
     card_list.append(card(
