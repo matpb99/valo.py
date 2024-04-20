@@ -13,9 +13,7 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def display_card_table(category1,category2,category3):
-
-    df_data =  pd.read_csv("./outputs/{}/{}/{}.csv".format(category1,category2,category3))
+def display_card_table(df_data,category1,category2,category3):
 
     category_key_value = translate_dict.get(category3)
 
@@ -86,7 +84,7 @@ def display_card_table2(df_data,category1,category2):
         styles={
             "card": {
                 "width": "100%",
-                "height": "500px"
+                "height": "450px"
                     }
                 }
                             )
@@ -94,8 +92,6 @@ def display_card_table2(df_data,category1,category2):
 
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
-
-st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -113,13 +109,14 @@ translate_dict = {
 }
 card_list = list()
 
-players_maps_data_df = pd.read_csv("player_data_by_map2.csv")
+players_maps_data_df = pd.read_csv("player_data_by_map.csv")
 conn = connect(':memory:')
 players_maps_data_df.to_sql(name='test_data', con=conn)
 
 with open("last_update.txt", "r") as archivo:
     last_update = archivo.read()
 
+st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
 st.header('Valo.py', divider='blue')
 st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024]")
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
@@ -165,7 +162,6 @@ with col3:
 
         display_card_table2(player_average_kills_overall,"players","most_kills")
 
-
 with col4:
     with st.container(border=True):
 
@@ -182,19 +178,47 @@ col21, col22, col23, col24 = st.columns(4)
 
 with col21:
     with st.container(border=True):
-        display_card_table2("players","most_kast")
+        sql_query = """SELECT Name, ROUND(AVG(Kast),2) AS Kast, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(Kast) DESC
+        LIMIT 5;"""
+        player_average_kast_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_kast_overall,"players","most_kast")
 
 with col22:
     with st.container(border=True):
-        display_card_table2("players","most_adr")
+        sql_query = """SELECT Name, ROUND(AVG(ADR),2) AS ADR, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(ADR) DESC
+        LIMIT 5;"""
+        player_average_adr_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_adr_overall,"players","most_adr")
     
 with col23:
     with st.container(border=True):
-        display_card_table2("players","most_fk")
+        sql_query = """SELECT Name, ROUND(AVG(FirstKills),2) AS FirstKills, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(FirstKills) DESC
+        LIMIT 5;"""
+        player_average_fk_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_fk_overall,"players","most_fk")
 
 with col24:
     with st.container(border=True):
-        display_card_table2("players","most_hs")
+        sql_query = """SELECT Name, ROUND(AVG(HSRate),2) AS HSRate, Team
+        FROM test_data
+        GROUP BY Name
+        ORDER BY AVG(HSRate) DESC
+        LIMIT 5;"""
+        player_average_hs_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(player_average_hs_overall,"players","most_hs")
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -206,38 +230,94 @@ col5, col6, col7, col8 = st.columns(4)
 
 with col5:
     with st.container(border=True):
-        display_card_table2("teams","most_rating")
+        sql_query = """SELECT Team, ROUND(AVG(Rating),2) AS Rating
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(Rating) DESC
+        LIMIT 5;"""
+        team_average_hs_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_hs_overall,"teams","most_rating")
 
 with col6:
     with st.container(border=True):
-        display_card_table2("teams","most_acs")
+        sql_query = """SELECT Team, ROUND(AVG(ACS),2) AS ACS
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(ACS) DESC
+        LIMIT 5;"""
+        team_average_acss_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_acss_overall,"teams","most_acs")
 
 with col7:
     with st.container(border=True):
-        display_card_table2("teams","most_kills")
+        sql_query = """SELECT Team, ROUND(AVG(Kills),2) AS Kills
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(Kills) DESC
+        LIMIT 5;"""
+        team_average_kills_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_kills_overall,"teams","most_kills")
 
 with col8:
     with st.container(border=True):
-        display_card_table2("teams","most_assists")
+        sql_query = """SELECT Team, ROUND(AVG(Assists),2) AS Assists
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(Assists) DESC
+        LIMIT 5;"""
+        team_average_assists_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_assists_overall,"teams","most_assists")
 
 col25, col26, col27, col28 = st.columns(4)
 
 with col25:
     with st.container(border=True):
-        display_card_table2("teams","most_kast")
+        sql_query = """SELECT Team, ROUND(AVG(Kast),2) AS Kast
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(Kast) DESC
+        LIMIT 5;"""
+        team_average_kast_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_kast_overall,"teams","most_kast")
 
 with col26:
     with st.container(border=True):
-        display_card_table2("teams","most_adr")
+        sql_query = """SELECT Team, ROUND(AVG(ADR),2) AS ADR
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(ADR) DESC
+        LIMIT 5;"""
+        team_average_adr_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_adr_overall,"teams","most_adr")
     
 with col27:
     with st.container(border=True):
-        display_card_table2("teams","most_fk")
+        sql_query = """SELECT Team, ROUND(AVG(FirstKills),2) AS FirstKills
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(FirstKills) DESC
+        LIMIT 5;"""
+        team_average_fk_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_fk_overall,"teams","most_fk")
 
 with col28:
     with st.container(border=True):
-        display_card_table2("teams","most_hs")
-        
+        sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(HSRate) DESC
+        LIMIT 5;"""
+        team_average_hs_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_hs_overall,"teams","most_hs")
+    
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -248,37 +328,105 @@ col9, col10, col11, col12 = st.columns(4)
 
 with col9:
     with st.container(border=True):
-        display_card_table("matches","players","most_rating")
+        sql_query = """SELECT Name, ROUND(AVG(Rating),2) AS Rating, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY AVG(Rating) DESC
+        LIMIT 5;"""
+
+        player_average_rating_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_average_rating_match,"matches","players","most_rating")
 
 with col10:
     with st.container(border=True):
-        display_card_table("matches","players","most_kills")
+        sql_query = """SELECT Name, SUM(Kills) AS Kills, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY SUM(Kills) DESC
+        LIMIT 5;"""
+
+        player_kills_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_kills_match,"matches","players","most_kills")
 
 with col11:
     with st.container(border=True):
-        display_card_table("matches","players","most_hs")
+        sql_query = """SELECT Name, ROUND(AVG(HSRate),2) AS HSRate, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY AVG(HSRate) DESC
+        LIMIT 5;"""
+
+        player_average_hs_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_average_hs_match,"matches","players","most_hs")
 
 with col12:
     with st.container(border=True):
-        display_card_table("matches","players","most_fk")
+        sql_query = """SELECT Name, SUM(FirstKills) AS FirstKills, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY SUM(FirstKills) DESC
+        LIMIT 5;"""
+
+        player_fk_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_fk_match,"matches","players","most_fk")
+
 
 col29, col30, col31, col32 = st.columns(4)
 
 with col29:
     with st.container(border=True):
-        display_card_table("matches","players","most_acs")
+        sql_query = """SELECT Name, ROUND(AVG(ACS),2) AS ACS, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY AVG(ACS) DESC
+        LIMIT 5;"""
+
+        player_average_acs_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_average_acs_match,"matches","players","most_acs")
 
 with col30:
     with st.container(border=True):
-        display_card_table("matches","players","most_adr")
+        sql_query = """SELECT Name, ROUND(AVG(ADR),2) AS ADR, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY AVG(ADR) DESC
+        LIMIT 5;"""
+
+        player_average_adr_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_average_adr_match,"matches","players","most_adr")
+
 
 with col31:
     with st.container(border=True):
-        display_card_table("matches","players","most_assists")
+        sql_query = """SELECT Name, SUM(Assists) AS Assists, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY SUM(Assists) DESC
+        LIMIT 5;"""
+
+        player_assists_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_assists_match,"matches","players","most_assists")
+
 
 with col32:
     with st.container(border=True):
-        display_card_table("matches","players","most_kast")
+        sql_query = """SELECT Name, ROUND(AVG(Kast),2) AS Kast, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY PlayerMatchKey
+        ORDER BY AVG(Kast) DESC
+        LIMIT 5;"""
+
+        player_average_kast_match = pd.read_sql(sql_query, conn)
+
+        display_card_table(player_average_kast_match,"matches","players","most_kast")
+
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
