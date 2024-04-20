@@ -83,10 +83,10 @@ def display_card_table2(category1,category2):
     category, value = df_data[category_key][0], df_data[category_key_value][0]
 
     if category1 == "players":
-        text = [str(value) + " {}".format(category_key_value), "Most {} in All VCTs".format(category_key_value)]
+        text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played in All VCTs".format(category_key_value)]
         title = str(category).capitalize()
     else:
-        text = [str(value) + " {}".format(category_key_value), "Most {} by Teams in All VCTs".format(category_key_value)]
+        text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played by Teams in All VCTs".format(category_key_value)]
         title = str(category).upper()
 
     card_list.append(card(
