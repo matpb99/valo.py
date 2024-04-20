@@ -25,8 +25,6 @@ card_list = list()
 
 def display_card_table(category1,category2,category3):
 
-    #most_rating = pd.read_csv("./outputs/maps/teams/most_rating.csv")
-
     df_data =  pd.read_csv("./outputs/{}/{}/{}.csv".format(category1,category2,category3))
 
     category_key_value = translate_dict.get(category3)
@@ -57,7 +55,6 @@ def display_card_table(category1,category2,category3):
             text = [str(value) +" {}".format(category_key_value), "Most {} in One Match by Teams in All VCTs".format(category_key_value), matchteams]
             title = str(category).upper()
 
-
     card_list.append(card(
         title = title,
         text = text,
@@ -76,10 +73,7 @@ def display_card_table(category1,category2,category3):
     
 def display_card_table2(category1,category2):
 
-    #most_rating = pd.read_csv("./outputs/teams/most_rating.csv")
-
     df_data =  pd.read_csv("./outputs/{}/{}.csv".format(category1,category2))
-
     category_key_value = translate_dict.get(category2)
 
     if category1=="players":
@@ -89,14 +83,12 @@ def display_card_table2(category1,category2):
 
     category, value = df_data[category_key][0], df_data[category_key_value][0]
 
-
     if category1 == "players":
         text = [str(value) + " {}".format(category_key_value), "Most {} in All VCTs".format(category_key_value)]
         title = str(category).capitalize()
     else:
         text = [str(value) + " {}".format(category_key_value), "Most {} by Teams in All VCTs".format(category_key_value)]
         title = str(category).upper()
-
 
     card_list.append(card(
         title = title,
@@ -121,7 +113,6 @@ def display_card_table2(category1,category2):
 st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
 
 with open("last_update.txt", "r") as archivo:
-    # Paso 5: Leer el contenido del archivo
     last_update = archivo.read()
 
 st.header('Valo.py', divider='blue')
