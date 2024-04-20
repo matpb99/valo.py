@@ -13,7 +13,7 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def display_card_table3(df_data,category):
+def display_card_table(df_data,category):
 
     category_key_value = translate_dict.get(category)
 
@@ -90,7 +90,7 @@ with col1:
         ORDER BY AVG(Rating) DESC
         LIMIT 5;"""
         match_average_rating_overall = pd.read_sql(sql_query, conn)
-        display_card_table3(match_average_rating_overall,"most_rating")
+        display_card_table(match_average_rating_overall,"most_rating")
 
 with col2:
     with st.container(border=True):
@@ -100,7 +100,7 @@ with col2:
         ORDER BY AVG(ACS) DESC
         LIMIT 5;"""
         match_average_acs_overall = pd.read_sql(sql_query, conn)
-        display_card_table3(match_average_acs_overall,"most_acs")
+        display_card_table(match_average_acs_overall,"most_acs")
 
 with col3:
     with st.container(border=True):
@@ -110,7 +110,7 @@ with col3:
         ORDER BY AVG(Kills) DESC
         LIMIT 5;"""
         match_kills_overall = pd.read_sql(sql_query, conn)
-        display_card_table3(match_kills_overall,"most_kills")
+        display_card_table(match_kills_overall,"most_kills")
 
 with col4:
     with st.container(border=True):
@@ -120,4 +120,4 @@ with col4:
         ORDER BY AVG(HSRate) DESC
         LIMIT 5;"""
         match_average_hs_overall = pd.read_sql(sql_query, conn)
-        display_card_table3(match_average_hs_overall,"most_hs")
+        display_card_table(match_average_hs_overall,"most_hs")
