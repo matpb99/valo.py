@@ -5,7 +5,6 @@ import plotly.express as px
 from streamlit_card import card
 import base64
 
-
 def load_image(filename, folder):
     with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
         data = f.read()
@@ -13,20 +12,122 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
+translate_dict = {
+    "most_rating":"Rating",
+    "most_kills":"Kills",
+    "most_acs": "ACS",
+    "most_assists": "Assists",
+    "most_hs": "HS Rate",
+    "most_fk": "First Kills",
+}
+
+card_list = list()
+
+def display_card_table(category1,category2,category3):
+
+    #most_rating = pd.read_csv("./outputs/maps/teams/most_rating.csv")
+
+    df_data =  pd.read_csv("./outputs/{}/{}/{}.csv".format(category1,category2,category3))
+
+    category_key_value = translate_dict.get(category3)
+
+    if category2=="players":
+        category_key = "Name"
+    else:
+        category_key = "Team"
+
+    if category1=="maps":
+        category, value, map_name, matchteams =  df_data[category_key][0], df_data[category_key_value][0], df_data["Map"][0], df_data["MatchTeams"][0]
+
+    elif category1=="matches":
+        category, value, matchteams = df_data[category_key][0], df_data[category_key_value][0], df_data["MatchTeams"][0]
+
+    if category1 == "maps":
+        if category2 == "players":
+            text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map in All VCTs".format(category_key_value), map_name, matchteams]
+            title = str(category).capitalize()
+        else:
+            text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map by Teams in All VCTs".format(category_key_value), map_name, matchteams]
+            title = str(category).upper()
+    else:
+        if category2 == "players":
+            text = [str(value) +" {}".format(category_key_value), "Most {} in One Match in All VCTs".format(category_key_value), matchteams]
+            title = str(category).capitalize()
+        else:
+            text = [str(value) +" {}".format(category_key_value), "Most {} in One Match by Teams in All VCTs".format(category_key_value), matchteams]
+            title = str(category).upper()
+
+
+    card_list.append(card(
+        title = title,
+        text = text,
+        image = load_image(category, category2),
+        styles={
+            "card": {
+                "width": "100%",
+                "height": "500px"
+                    }
+                }
+                            )
+    )
+
+    st.header("Top 5 Ranking")
+    st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
+    
+def display_card_table2(category1,category2):
+
+    #most_rating = pd.read_csv("./outputs/teams/most_rating.csv")
+
+    df_data =  pd.read_csv("./outputs/{}/{}.csv".format(category1,category2))
+
+    category_key_value = translate_dict.get(category2)
+
+    if category1=="players":
+        category_key = "Name"
+    else:
+        category_key = "Team"
+
+    category, value = df_data[category_key][0], df_data[category_key_value][0]
+
+
+    if category1 == "players":
+        text = [str(value) + " {}".format(category_key_value), "Most {} in All VCTs".format(category_key_value)]
+        title = str(category).capitalize()
+    else:
+        text = [str(value) + " {}".format(category_key_value), "Most {} by Teams in All VCTs".format(category_key_value)]
+        title = str(category).upper()
+
+
+    card_list.append(card(
+        title = title,
+        text = text,
+        image = load_image(category, category1),
+        styles={
+            "card": {
+                "width": "100%",
+                "height": "500px"
+                    }
+                }
+                            )
+    )
+
+    st.header("Top 5 Ranking")
+    st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
+
+st.set_page_config(layout="wide",initial_sidebar_state="collapsed")
 
 with open("last_update.txt", "r") as archivo:
     # Paso 5: Leer el contenido del archivo
     last_update = archivo.read()
 
-
 st.header('Valo.py', divider='blue')
 st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024]")
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
+
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -37,92 +138,19 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     with st.container(border=True):
-
-        most_rating = pd.read_csv("./outputs/players/most_rating.csv")
-
-        player, rating = most_rating["Name"][0], most_rating["Rating"][0]
-    
-        player_rating = card(
-        title = str(player).capitalize(),
-        text = [str(rating)+" Rating", "Most Rating in All VCTs"],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
+        display_card_table2("players","most_rating")
 
 with col2:
     with st.container(border=True):
-
-        most_acs = pd.read_csv("./outputs/players/most_acs.csv")
-
-        player, acs = most_acs["Name"][0], most_acs["ACS"][0]
-    
-        player_acs = card(
-        title = str(player).capitalize(),
-        text = [str(acs)+" ACS", "Most Average Combat Score in All VCTs"],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                        )
-        st.header("Top 5 Ranking")
-        st.dataframe(most_acs.head(5), hide_index=True, use_container_width=True)
-        #with st.expander("Show Ranking"):
-            #st.dataframe(most_acs.head(5), hide_index=True, use_container_width=True)
+        display_card_table2("players","most_acs")
 
 with col3:
     with st.container(border=True):
-    
-        most_kills = pd.read_csv("./outputs/players/most_kills.csv")
-
-        player, kills = most_kills["Name"][0], most_kills["Kills"][0]
-    
-        player_kills = card(
-        title = str(player).capitalize(),
-        text = [str(kills)+" Kills", "Most Kills in All VCTs"],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                        )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
+        display_card_table2("players","most_kills")
 
 with col4:
     with st.container(border=True):
-        most_assists = pd.read_csv("./outputs/players/most_assists.csv")
-
-        player, assists = most_assists["Name"][0], most_assists["Assists"][0]
-    
-        player_assists = card(
-        title = str(player).capitalize(),
-        text = [str(assists)+" Assists", "Most Assists in All VCTs"],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                        )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_assists.head(5), hide_index=True, use_container_width=True)
-
+        display_card_table2("players","most_assists")
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -132,374 +160,94 @@ st.title("Top Teams")
 
 col5, col6, col7, col8 = st.columns(4)
 
-
 with col5:
     with st.container(border=True):
-        most_rating = pd.read_csv("./outputs/teams/most_rating.csv")
-
-        team, rating = most_rating["Team"][0], most_rating["Rating"][0]
-    
-        team_rating = card(
-        title = str(team).upper(),
-        text = [str(rating)+" Rating", "Most Team Rating in All VCTs"],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
+        display_card_table2("teams","most_rating")
 
 with col6:
     with st.container(border=True):
-        most_acs = pd.read_csv("./outputs/teams/most_acs.csv")
-
-        team, acs = most_acs["Team"][0], most_acs["ACS"][0]
-    
-        team_acs = card(
-        title = str(team).upper(),
-        text = [str(acs)+" ACS", "Most Team Average Combat Score in All VCTs"],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_acs.head(5), hide_index=True, use_container_width=True)
+        display_card_table2("teams","most_acs")
 
 with col7:
     with st.container(border=True):
-        most_kills = pd.read_csv("./outputs/teams/most_kills.csv")
-
-        team, kills = most_kills["Team"][0], most_kills["Kills"][0]
-    
-        team_kills = card(
-        title = str(team).upper(),
-        text = [str(kills)+" Kills", "Most Team Kills in All VCTs"],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
+        display_card_table2("teams","most_kills")
 
 with col8:
     with st.container(border=True):
-        most_assists = pd.read_csv("./outputs/teams/most_assists.csv")
-
-        team, assists = most_assists["Team"][0], most_assists["Assists"][0]
-    
-        team_assists = card(
-        title = str(team).upper(),
-        text = [str(assists)+" Assists", "Most Team Assists in All VCTs"],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
+        display_card_table2("teams","most_assists")
         
-        st.header("Top 5 Ranking")
-        st.dataframe(most_assists.head(5), hide_index=True, use_container_width=True)
-
-
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 
 st.title("Top Players in One Match")
 
-col13, col14, col15, col16 = st.columns(4)
-
-
-with col13:
-    with st.container(border=True):
-        most_rating = pd.read_csv("./outputs/matches/players/most_rating.csv")
-
-        player, rating, matchteams = most_rating["Name"][0], most_rating["Rating"][0], most_rating["MatchTeams"][0]
-    
-        player_rating_match = card(
-        title = str(player).capitalize(),
-        text = [str(rating)+" Rating", "Most Rating in One Match in All VCTs", matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
-
-with col14:
-    with st.container(border=True):
-        most_kills = pd.read_csv("./outputs/matches/players/most_kills.csv")
-
-        player, kills, matchteams = most_kills["Name"][0], most_kills["Kills"][0], most_kills["MatchTeams"][0]
-    
-        player_kill_match = card(
-        title = str(player).capitalize(),
-        text = [str(kills)+" Kills", "Most Kills in One Match in All VCTs", matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
-
-with col15:
-    with st.container(border=True):
-        most_hs = pd.read_csv("./outputs/matches/players/most_hs.csv")
-
-        player, hs, matchteams = most_hs["Name"][0], most_hs["HS Rate"][0], most_hs["MatchTeams"][0]
-    
-        player_hs_match = card(
-        title = str(player).capitalize(),
-        text = [str(hs)+" HS Rate", "Most HS Rate in One Match in All VCTs", matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_hs.head(5), hide_index=True, use_container_width=True)
-
-
-with col16:
-    with st.container(border=True):
-        most_fk = pd.read_csv("./outputs/matches/players/most_fk.csv")
-
-        player, fk, matchteams = most_fk["Name"][0], most_fk["First Kills"][0], most_fk["MatchTeams"][0]
-    
-        player_fk_match = card(
-        title = str(player).capitalize(),
-        text = [str(fk)+" First Kills", "Most First Kills in One Match in All VCTs", matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_fk.head(5), hide_index=True, use_container_width=True)
-
-
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-
-
-st.title("Top Players in One Single Map")
-
 col9, col10, col11, col12 = st.columns(4)
 
 with col9:
     with st.container(border=True):
-        most_rating = pd.read_csv("./outputs/maps/players/most_rating.csv")
-
-        player, rating, map_name, matchteams = most_rating["Name"][0], most_rating["Rating"][0], most_rating["Map"][0], most_rating["MatchTeams"][0]
-    
-        player_rating_map = card(
-        title = str(player).capitalize(),
-        text = [str(rating)+" Rating", "Most Rating in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
+        display_card_table("matches","players","most_rating")
 
 with col10:
     with st.container(border=True):
-        most_kills = pd.read_csv("./outputs/maps/players/most_kills.csv")
-
-        player, kills, map_name, matchteams = most_kills["Name"][0], most_kills["Kills"][0], most_kills["Map"][0], most_kills["MatchTeams"][0]
-    
-        player_kill_map = card(
-        title = str(player).capitalize(),
-        text = [str(kills)+" Kills", "Most Kills in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
+        display_card_table("matches","players","most_kills")
 
 with col11:
     with st.container(border=True):
-        most_hs = pd.read_csv("./outputs/maps/players/most_hs.csv")
-
-        player, hs, map_name, matchteams = most_hs["Name"][0], most_hs["HS Rate"][0], most_hs["Map"][0], most_hs["MatchTeams"][0]
-    
-        player_hs_map = card(
-        title = str(player).capitalize(),
-        text = [str(hs)+" HS Rate", "Most HS Rate in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_hs.head(5), hide_index=True, use_container_width=True)
+        display_card_table("matches","players","most_hs")
 
 with col12:
     with st.container(border=True):
-        most_fk = pd.read_csv("./outputs/maps/players/most_fk.csv")
+        display_card_table("matches","players","most_fk")
 
-        player, fk, map_name, matchteams = most_fk["Name"][0], most_fk["First Kills"][0], most_fk["Map"][0], most_fk["MatchTeams"][0]
-    
-        player_fk_map = card(
-        title = str(player).capitalize(),
-        text = [str(fk)+" First Kills", "Most First Kills in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(player, "players"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
+###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
+
+st.title("Top Players in One Single Map")
+
+col13, col14, col15, col16 = st.columns(4)
+
+with col13:
+    with st.container(border=True):
+        display_card_table("maps","players","most_rating")
+
+with col14:
+    with st.container(border=True):
+        display_card_table("maps","players","most_kills")
+
+with col15:
+    with st.container(border=True):
+        display_card_table("maps","players","most_hs")
+
+with col16:
+    with st.container(border=True):
+        display_card_table("maps","players","most_fk")
         
-        st.header("Top 5 Ranking")
-        st.dataframe(most_fk.head(5), hide_index=True, use_container_width=True)
-
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
-
 
 st.title("Top Teams in One Single Map")
 
 col17, col18, col19, col20 = st.columns(4)
 
-
 with col17:
     with st.container(border=True):
-        most_rating = pd.read_csv("./outputs/maps/teams/most_rating.csv")
-
-        team, rating, map_name, matchteams = most_rating["Team"][0], most_rating["Rating"][0], most_rating["Map"][0], most_rating["MatchTeams"][0]
-    
-        team_rating_map = card(
-        title = str(team).upper(),
-        text = [str(rating)+" Rating", "Most Rating by Teams in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_rating.head(5), hide_index=True, use_container_width=True)
+        display_card_table("maps","teams","most_rating")
 
 with col18:
     with st.container(border=True):
-        most_kills = pd.read_csv("./outputs/maps/teams/most_kills.csv")
-
-        team, kills, map_name, matchteams = most_kills["Team"][0], most_kills["Kills"][0], most_kills["Map"][0], most_kills["MatchTeams"][0]
-    
-        team_kill_map = card(
-        title = str(team).upper(),
-        text = [str(kills)+" Kills", "Most Kills by Teams in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
-        
-        st.header("Top 5 Ranking")
-        st.dataframe(most_kills.head(5), hide_index=True, use_container_width=True)
+        display_card_table("maps","teams","most_kills")
 
 with col19:
     with st.container(border=True):
-        most_hs = pd.read_csv("./outputs/maps/teams/most_hs.csv")
-
-        team, hs, map_name, matchteams = most_hs["Team"][0], most_hs["HS Rate"][0], most_hs["Map"][0], most_hs["MatchTeams"][0]
-    
-        team_hs_map = card(
-        title = str(team).upper(),
-        text = [str(hs)+" HS Rate", "Most HS Rate by Team in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
+        display_card_table("maps","teams","most_hs")
         
-        st.header("Top 5 Ranking")
-        st.dataframe(most_hs.head(5), hide_index=True, use_container_width=True)
-
 with col20:
     with st.container(border=True):
-        most_fk = pd.read_csv("./outputs/maps/teams/most_fk.csv")
-
-        team, fk, map_name, matchteams = most_fk["Team"][0], most_fk["First Kills"][0], most_fk["Map"][0], most_fk["MatchTeams"][0]
-    
-        team_fk_map = card(
-        title = str(team).upper(),
-        text = [str(fk)+" First Kills", "Most First Kills by Team in One Single Map in All VCTs", map_name, matchteams],
-        image = load_image(team, "teams"),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "500px"
-                    }
-                }
-                            )
+        display_card_table("maps","teams","most_fk")
         
-        st.header("Top 5 Ranking")
-        st.dataframe(most_fk.head(5), hide_index=True, use_container_width=True)
-
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
