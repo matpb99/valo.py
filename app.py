@@ -13,12 +13,14 @@ def load_image(filename, folder):
     return data
 
 translate_dict = {
-    "most_rating":"Rating",
-    "most_kills":"Kills",
     "most_acs": "ACS",
+    "most_adr": "ADR",
     "most_assists": "Assists",
-    "most_hs": "HS Rate",
     "most_fk": "First Kills",
+    "most_hs": "HS Rate",
+    "most_kast":"Kast",
+    "most_kills":"Kills",
+    "most_rating": "Rating"
 }
 
 card_list = list()
@@ -142,6 +144,24 @@ with col4:
     with st.container(border=True):
         display_card_table2("players","most_assists")
 
+col21, col22, col23, col24 = st.columns(4)
+
+with col21:
+    with st.container(border=True):
+        display_card_table2("players","most_kast")
+
+with col22:
+    with st.container(border=True):
+        display_card_table2("players","most_adr")
+    
+with col23:
+    with st.container(border=True):
+        display_card_table2("players","most_fk")
+
+with col24:
+    with st.container(border=True):
+        display_card_table2("players","most_hs")
+
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -165,6 +185,24 @@ with col7:
 with col8:
     with st.container(border=True):
         display_card_table2("teams","most_assists")
+
+col25, col26, col27, col28 = st.columns(4)
+
+with col25:
+    with st.container(border=True):
+        display_card_table2("teams","most_kast")
+
+with col26:
+    with st.container(border=True):
+        display_card_table2("teams","most_adr")
+    
+with col27:
+    with st.container(border=True):
+        display_card_table2("teams","most_fk")
+
+with col28:
+    with st.container(border=True):
+        display_card_table2("teams","most_hs")
         
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -189,6 +227,24 @@ with col11:
 with col12:
     with st.container(border=True):
         display_card_table("matches","players","most_fk")
+
+col29, col30, col31, col32 = st.columns(4)
+
+with col29:
+    with st.container(border=True):
+        display_card_table("matches","players","most_acs")
+
+with col30:
+    with st.container(border=True):
+        display_card_table("matches","players","most_adr")
+
+with col31:
+    with st.container(border=True):
+        display_card_table("matches","players","most_assists")
+
+with col32:
+    with st.container(border=True):
+        display_card_table("matches","players","most_kast")
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
