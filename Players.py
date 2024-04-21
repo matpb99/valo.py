@@ -7,12 +7,6 @@ from streamlit_card import card
 from sqlite3 import connect
 
 
-def load_image(filename, folder):
-    with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
-        data = f.read()
-        encoded = base64.b64encode(data)
-    data = "data:image/png;base64," + encoded.decode("utf-8")
-    return data
 #Detalle
 def display_card_table(df_data,category1,category3):
 
@@ -21,12 +15,12 @@ def display_card_table(df_data,category1,category3):
     if category1 == "maps":
         player, value, map_name, matchteams =  df_data["Name"][0], df_data[category_key_value][0], df_data["Map"][0], df_data["MatchTeams"][0]
         text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map in All VCTs".format(category_key_value), map_name, matchteams]
-        title = str(player).upper()
+        title = str(player).capitalize()
 
     elif category1 == "matches":
         player, value, matchteams = df_data["Name"][0], df_data[category_key_value][0], df_data["MatchTeams"][0]
         text = [str(value) +" {}".format(category_key_value), "Most {} in One Match in All VCTs".format(category_key_value), matchteams]
-        title = str(player).upper()
+        title = str(player).capitalize()
 
     card_list.append(card(
         title = title,
@@ -43,6 +37,7 @@ def display_card_table(df_data,category1,category3):
 
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
+
 ## General   
 def display_card_table2(df_data,category2):
 
@@ -51,7 +46,7 @@ def display_card_table2(df_data,category2):
     player, value = df_data["Name"][0], df_data[category_key_value][0]
 
     text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played in All VCTs".format(category_key_value)]
-    title = str(player).upper()
+    title = str(player).capitalize()
 
     card_list.append(card(
         title = title,
@@ -64,11 +59,37 @@ def display_card_table2(df_data,category2):
                     }
                 }
                             )
-    )
+                    )
 
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
-    
+  
+@st.cache_data
+def load_image(filename, folder):
+    with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
+        data = f.read()
+        encoded = base64.b64encode(data)
+    data = "data:image/png;base64," + encoded.decode("utf-8")
+    return data
+
+@st.cache_data
+def return_query(sql_query):
+    df = pd.read_sql(sql_query, conn)
+    return df
+
+@st.cache_data
+def init_data():
+    players_maps_data_df = pd.read_csv("player_data_by_map.csv")
+    with open("last_update.txt", "r") as archivo:
+        last_update = archivo.read()
+
+    return players_maps_data_df, last_update
+
+def init_conn(df):
+    conn = connect(':memory:')
+    df.to_sql(name='test_data', con=conn)
+    return conn
+
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -83,20 +104,19 @@ translate_dict = {
     "most_kills" : "Kills",
     "most_rating" : "Rating"
 }
+
 card_list = list()
 
-players_maps_data_df = pd.read_csv("player_data_by_map.csv")
-conn = connect(':memory:')
-players_maps_data_df.to_sql(name='test_data', con=conn)
+st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
 
-with open("last_update.txt", "r") as archivo:
-    last_update = archivo.read()
+players_maps_data_df, last_update = init_data()
+
+conn = init_conn(players_maps_data_df)
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 
-st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py", page_icon="https://icons8.com/icon/GjCK2f2wpZxt/valorant")
 st.header('Valo.py', divider='blue')
 st.sidebar.header("Categories")
 st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] :orange[[Under Developing]]")
@@ -112,12 +132,14 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     with st.container(border=True):
+        
         sql_query = """SELECT Name, ROUND(AVG(Rating),2) AS Rating, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(Rating) DESC
         LIMIT 5;"""
-        player_average_rating_overall = pd.read_sql(sql_query, conn)
+
+        player_average_rating_overall = return_query(sql_query)
 
         st.header(":blue[MVP Overall]")
 

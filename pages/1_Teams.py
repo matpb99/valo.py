@@ -100,7 +100,7 @@ with open("last_update.txt", "r") as archivo:
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 
-st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py", page_icon="https://icons8.com/icon/GjCK2f2wpZxt/valorant")
+st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
 st.header('Valo.py', divider='blue')
 st.sidebar.header("Categories")
 st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024]")
