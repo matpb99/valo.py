@@ -20,12 +20,12 @@ def display_card_table(df_data,category1,category3):
 
     if category1 == "maps":
         player, value, map_name, matchteams =  df_data["Name"][0], df_data[category_key_value][0], df_data["Map"][0], df_data["MatchTeams"][0]
-        text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map by Teams in All VCTs".format(category_key_value), map_name, matchteams]
+        text = [str(value) +" {}".format(category_key_value), "Most {} in One Single Map in All VCTs".format(category_key_value), map_name, matchteams]
         title = str(player).upper()
 
     elif category1 == "matches":
         player, value, matchteams = df_data["Name"][0], df_data[category_key_value][0], df_data["MatchTeams"][0]
-        text = [str(value) +" {}".format(category_key_value), "Most {} in One Match by Teams in All VCTs".format(category_key_value), matchteams]
+        text = [str(value) +" {}".format(category_key_value), "Most {} in One Match in All VCTs".format(category_key_value), matchteams]
         title = str(player).upper()
 
     card_list.append(card(
@@ -50,7 +50,7 @@ def display_card_table2(df_data,category2):
 
     player, value = df_data["Name"][0], df_data[category_key_value][0]
 
-    text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played by Teams in All VCTs".format(category_key_value)]
+    text = [str(value) + " {}".format(category_key_value), "Most Average {} per Map Played in All VCTs".format(category_key_value)]
     title = str(player).upper()
 
     card_list.append(card(

@@ -24,7 +24,7 @@ def display_card_table(df_data, role_name, category):
 
     player, value = df_data["Name"][0], df_data[category_key_value][0]
 
-    text = [str(value) + " {}".format(category_key_value), "Best {} by {}{} in All VCTs ".format(role_name.capitalize(), prefix, category_key_value), "Played at least 3 maps"]
+    text = [str(value) + " {}".format(category_key_value), "Best {} by {}{} in All VCTs ".format(role_name.capitalize(), prefix, category_key_value), "Played at least 4 maps"]
     title = str(player).capitalize()
 
     card_list.append(card(
@@ -88,7 +88,7 @@ with col1:
         FROM test_data
         WHERE Role=="duelist" 
         GROUP BY Name
-        HAVING COUNT(Role)>=3
+        HAVING COUNT(Role)>=4
         ORDER BY AVG(Rating) DESC
         LIMIT 3;"""
 
@@ -101,7 +101,7 @@ with col2:
         FROM test_data
         WHERE Role=="sentinel" 
         GROUP BY Name
-        HAVING COUNT(Role)>=3
+        HAVING COUNT(Role)>=4
         ORDER BY AVG(Rating) DESC
         LIMIT 3;"""
 
@@ -114,7 +114,7 @@ with col3:
         FROM test_data
         WHERE Role=="controller" 
         GROUP BY Name
-        HAVING COUNT(Role)>=3
+        HAVING COUNT(Role)>=4
         ORDER BY AVG(Rating) DESC
         LIMIT 3;"""
 
@@ -127,7 +127,7 @@ with col4:
         FROM test_data
         WHERE Role=="initiator" 
         GROUP BY Name
-        HAVING COUNT(Role)>=3
+        HAVING COUNT(Role)>=4
         ORDER BY AVG(Rating) DESC
         LIMIT 3;"""
 
