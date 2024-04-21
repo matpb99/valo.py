@@ -106,7 +106,7 @@ st.subheader("_Last Update:_ :green[{}]".format(last_update))
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 
-st.title("Top Players")
+st.title("Top Players Overall")
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -119,6 +119,8 @@ with col1:
         LIMIT 5;"""
         player_average_rating_overall = pd.read_sql(sql_query, conn)
 
+        st.header(":blue[MVP Overall]")
+
         display_card_table2(player_average_rating_overall,"most_rating")
 
 with col2:
@@ -129,6 +131,8 @@ with col2:
         ORDER BY AVG(ACS) DESC
         LIMIT 5;"""
         player_average_acs_overall = pd.read_sql(sql_query, conn)
+
+        st.header(":blue[Combat Specialist]")
 
         display_card_table2(player_average_acs_overall,"most_acs")
 
@@ -141,6 +145,8 @@ with col3:
         LIMIT 5;"""
         player_average_kills_overall = pd.read_sql(sql_query, conn)
 
+        st.header(":blue[Elimination Expert]")
+
         display_card_table2(player_average_kills_overall,"most_kills")
 
 with col4:
@@ -152,6 +158,8 @@ with col4:
         ORDER BY AVG(Assists) DESC
         LIMIT 5;"""
         player_average_assists_overall = pd.read_sql(sql_query, conn)
+
+        st.header(":blue[Support Master]") 
 
         display_card_table2(player_average_assists_overall,"most_assists")
 
@@ -166,6 +174,8 @@ with col5:
         LIMIT 5;"""
         player_average_kast_overall = pd.read_sql(sql_query, conn)
 
+        st.header(":blue[Team Architect]") 
+
         display_card_table2(player_average_kast_overall,"most_kast")
 
 with col6:
@@ -176,6 +186,8 @@ with col6:
         ORDER BY AVG(ADR) DESC
         LIMIT 5;"""
         player_average_adr_overall = pd.read_sql(sql_query, conn)
+
+        st.header(":blue[Consistent Impact]") 
 
         display_card_table2(player_average_adr_overall,"most_adr")
     
@@ -188,6 +200,8 @@ with col7:
         LIMIT 5;"""
         player_average_fk_overall = pd.read_sql(sql_query, conn)
 
+        st.header(":blue[Aggressive Strategist]") 
+
         display_card_table2(player_average_fk_overall,"most_fk")
 
 with col8:
@@ -198,6 +212,8 @@ with col8:
         ORDER BY AVG(HSRate) DESC
         LIMIT 5;"""
         player_average_hs_overall = pd.read_sql(sql_query, conn)
+
+        st.header(":blue[Sharpshooting Champion]") 
 
         display_card_table2(player_average_hs_overall,"most_hs")
 
