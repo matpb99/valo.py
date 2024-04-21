@@ -13,7 +13,6 @@ def load_image(filename, folder):
         encoded = base64.b64encode(data)
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
-
 #Detalle
 def display_card_table(df_data,category1,category3):
 
@@ -353,7 +352,7 @@ with col19:
 
 with col20:
     with st.container(border=True):
-        sql_query = """SELECT Name, FirstKills , Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, FirstKills, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         ORDER BY FirstKills DESC
         LIMIT 5;"""
