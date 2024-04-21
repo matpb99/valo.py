@@ -7,7 +7,7 @@ from streamlit_card import card
 from sqlite3 import connect
 
 def load_image(filename, folder):
-    with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
+    with open("./{}/{}.png".format(folder.lower(), filename.lower()), "rb") as f:
         data = f.read()
         encoded = base64.b64encode(data)
     data = "data:image/png;base64," + encoded.decode("utf-8")
