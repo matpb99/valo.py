@@ -24,7 +24,7 @@ def display_card_table(df_data, role_name, category):
 
     player, value = df_data["Name"][0], df_data[category_key_value][0]
 
-    text = [str(value) + " {}".format(category_key_value), "Best {} by {}{} in All VCTs ".format(role_name.capitalize(), prefix, category_key_value), "Played at least 4 maps"]
+    text = [str(value) + " {}".format(category_key_value), "{}{} in All VCTs ".format( prefix, category_key_value), "Played at least 4 maps"]
     title = str(player).capitalize()
 
     card_list.append(card(
@@ -93,6 +93,9 @@ with col1:
         LIMIT 3;"""
 
         duelist_rating = pd.read_sql(sql_query, conn)
+
+        st.header(":blue[Best Duelist]")
+
         display_card_table(duelist_rating,"duelist","most_rating")
 
 with col2:
@@ -106,6 +109,9 @@ with col2:
         LIMIT 3;"""
 
         sentinel_rating = pd.read_sql(sql_query, conn)
+
+        st.header(":red[Best Sentinel]")
+
         display_card_table(sentinel_rating,"sentinel","most_rating")
 
 with col3:
@@ -119,6 +125,9 @@ with col3:
         LIMIT 3;"""
 
         controller_rating = pd.read_sql(sql_query, conn)
+
+        st.header(":white[Best Controller]")
+
         display_card_table(controller_rating,"controller","most_rating")
 
 with col4:
@@ -132,4 +141,7 @@ with col4:
         LIMIT 3;"""
 
         initiator_rating = pd.read_sql(sql_query, conn)
+
+        st.header(":orange[Best Initiator]")
+
         display_card_table(initiator_rating,"initiator","most_rating")
