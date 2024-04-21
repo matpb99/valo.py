@@ -39,7 +39,7 @@ def display_card_table(df_data, agent_name,category):
                 }
                             )
     )
-    st.header("Top 3 Ranking")
+    st.subheader("Top 3 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 ###############################################################################################################################################################################################################

@@ -13,7 +13,7 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def display_card_table(df_data,category):
+def display_card_table(df_data, category):
 
     category_key_value = translate_dict.get(category)
 
@@ -22,24 +22,42 @@ def display_card_table(df_data,category):
     else:
         prefix = "Average "
 
-    teams, value = df_data["MatchTeams"][0], df_data[category_key_value][0]
+    localteam, visitteam, value = df_data["LocalTeam"][0], df_data["VisitTeam"][0],  df_data[category_key_value][0]
 
-    text = [str(value) + " {}".format(category_key_value), "Most {}{} by Both Teams in All VCTs".format(prefix, category_key_value)]
-    title = str(teams).upper()
+    col1, col2 = st.columns(2)
 
-    card_list.append(card(
-        title = title,
-        text = text,
-        #image = load_image(category, category1),
-        styles={
-            "card": {
-                "width": "100%",
-                "height": "400px"
+    text = "Most {}{} by Both Teams in All VCTs".format(prefix, category_key_value)
+
+    with col1:
+        card_list.append(card(
+            title = str(localteam.upper()),
+            text = "",
+            image = load_image(localteam, "Teams"),
+            styles={
+                "card": {
+                    "width": "100%",
+                    "height": "350px"
+                        }
                     }
-                }
-                            )
-    )
-    st.header("Top 5 Ranking")
+                                )
+        )
+
+    with col2:
+        card_list.append(card(
+            title = str(visitteam.upper()),
+            text = "",
+            image = load_image(visitteam, "Teams"),
+            styles={
+                "card": {
+                    "width": "100%",
+                    "height": "350px"
+                        }
+                    }
+                                )
+                             )
+
+    st.header(text)
+    st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 ###############################################################################################################################################################################################################
@@ -84,7 +102,7 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, ROUND(AVG(Rating),3) AS Rating, Date
+        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(Rating),3) AS Rating, Date
         FROM test_data
         GROUP BY MatchKey
         ORDER BY AVG(Rating) DESC
@@ -94,7 +112,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, ROUND(AVG(ACS),3) AS ACS, Date
+        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(ACS),3) AS ACS, Date
         FROM test_data
         GROUP BY MatchKey
         ORDER BY AVG(ACS) DESC
@@ -104,7 +122,7 @@ with col2:
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, SUM(Kills) AS Kills, Date
+        sql_query = """SELECT LocalTeam, VisitTeam, SUM(Kills) AS Kills, Date
         FROM test_data
         GROUP BY MatchKey
         ORDER BY AVG(Kills) DESC
@@ -114,7 +132,7 @@ with col3:
 
 with col4:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam || " VS " || VisitTeam AS MatchTeams, ROUND(AVG(HSRate),3) AS HSRate, Date
+        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(HSRate),3) AS HSRate, Date
         FROM test_data
         GROUP BY MatchKey
         ORDER BY AVG(HSRate) DESC

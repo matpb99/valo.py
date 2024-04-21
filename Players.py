@@ -35,7 +35,7 @@ def display_card_table(df_data,category1,category3):
                             )
     )
 
-    st.header("Top 5 Ranking")
+    st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 ## General   
@@ -61,7 +61,7 @@ def display_card_table2(df_data,category2):
                             )
                     )
 
-    st.header("Top 5 Ranking")
+    st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
   
 @st.cache_data
