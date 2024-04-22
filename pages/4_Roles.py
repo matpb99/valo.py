@@ -27,6 +27,8 @@ def load_image(filename, folder):
 
 def draw_player_rol_card_by_metric(role_name, metric):
 
+    st.header(":{}[Best {}]".format(color, role_name.capitalize()))
+
     if role_name == "duelist":
         color = "blue"
     elif role_name == "sentinel":
@@ -36,7 +38,10 @@ def draw_player_rol_card_by_metric(role_name, metric):
     else:
         color = "orange"
 
-    st.header(":{}[Best {}]".format(color, role_name.capitalize()))
+    if metric == "FirstKills" or metric == "Kills" or metric == "Assists":
+        prefix = ""
+    else:
+        prefix = "Average "
 
     sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG({}),2) AS {}, Team
         FROM test_data
@@ -47,11 +52,6 @@ def draw_player_rol_card_by_metric(role_name, metric):
         LIMIT 3;""".format(metric, metric, role_name, metric)
 
     df_data = pd.read_sql(sql_query, conn)
-
-    if metric == "FirstKills" or metric == "Kills" or metric == "Assists":
-        prefix = ""
-    else:
-        prefix = "Average "
 
     player, value = df_data["Name"][0], df_data[metric][0]
 

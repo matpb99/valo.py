@@ -6,7 +6,25 @@ import plotly.express as px
 from streamlit_card import card
 from sqlite3 import connect
 
-#Detalle
+def init_data():
+    players_maps_data_df = pd.read_csv("player_data_by_map.csv")
+    with open("last_update.txt", "r") as archivo:
+        last_update = archivo.read()
+
+    return players_maps_data_df, last_update
+
+def init_conn(df):
+    conn = connect(':memory:')
+    df.to_sql(name='test_data', con=conn)
+    return conn
+        
+def load_image(filename, folder):
+    with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
+        data = f.read()
+        encoded = base64.b64encode(data)
+    data = "data:image/png;base64," + encoded.decode("utf-8")
+    return data
+
 def display_card_table(df_data, category, metric):
 
     category_key = translate_dict.get(metric)
@@ -36,18 +54,28 @@ def display_card_table(df_data, category, metric):
 
     st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
+   
+def draw_player_card_by_metric(metric):
 
-## General   
-def display_card_table2(df_data, metric):
+    if metric == "Rating" or "HSRate":
+        round_value = 3
+    else:
+        round_value = 2
 
-    metric_key = translate_dict.get(metric)
+    sql_query = """SELECT Name, ROUND(AVG({}),{}) AS {}, Team
+                        FROM test_data
+                        GROUP BY Name
+                        ORDER BY AVG({}) DESC
+                        LIMIT 5;""".format(metric, round_value, metric, metric)
+    
+    df_data = pd.read_sql(sql_query, conn)
 
-    player, value = df_data["Name"][0], df_data[metric_key][0]
+    player, value = df_data["Name"][0], df_data[metric][0]
 
-    text = [str(value) + " {}".format(metric_key), "Most Average {} per Map Played in All VCTs".format(metric_key)]
+    text = [str(value) + " {}".format(metric), "Most Average {} per Map Played in All VCTs".format(metric)]
     title = str(player).capitalize()
 
-    card_list.append(card(
+    card(
         title = title,
         text = text,
         image = load_image(player, "players"),
@@ -57,182 +85,63 @@ def display_card_table2(df_data, metric):
                 "height": "400px"
                     }
                 }
-                            )
-                    )
+        )
 
     st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
-  
-def load_image(filename, folder):
-    with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
-        data = f.read()
-        encoded = base64.b64encode(data)
-    data = "data:image/png;base64," + encoded.decode("utf-8")
-    return data
-
-def return_query(sql_query):
-    df = pd.read_sql(sql_query, conn)
-    return df
-
-def init_data():
-    players_maps_data_df = pd.read_csv("player_data_by_map.csv")
-    with open("last_update.txt", "r") as archivo:
-        last_update = archivo.read()
-
-    return players_maps_data_df, last_update
-
-def init_conn(df):
-    conn = connect(':memory:')
-    df.to_sql(name='test_data', con=conn)
-    return conn
-
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-
-translate_dict = {
-    "most_acs" : "ACS",
-    "most_adr" : "ADR",
-    "most_assists" : "Assists",
-    "most_fk" : "FirstKills",
-    "most_hs" : "HSRate",
-    "most_kast" : "Kast",
-    "most_kills" : "Kills",
-    "most_rating" : "Rating"
-}
-
-card_list = list()
 
 st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
-
 players_maps_data_df, last_update = init_data()
-
 conn = init_conn(players_maps_data_df)
-
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
 
 st.header('Valo.py', divider='blue')
 st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] :orange[[Under Developing]]")
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
-
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-
 st.title("Top Players Overall")
 
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     with st.container(border=True):
-        
-        sql_query = """SELECT Name, ROUND(AVG(Rating),2) AS Rating, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(Rating) DESC
-        LIMIT 5;"""
-
-        player_average_rating_overall = return_query(sql_query)
-
         st.header(":blue[MVP Overall]")
-
-        display_card_table2(player_average_rating_overall,"most_rating")
+        draw_player_card_by_metric("Rating")
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(ACS),2) AS ACS, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(ACS) DESC
-        LIMIT 5;"""
-        player_average_acs_overall = pd.read_sql(sql_query, conn)
-
         st.header(":blue[Combat Specialist]")
-
-        display_card_table2(player_average_acs_overall,"most_acs")
+        draw_player_card_by_metric("ACS")
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(Kills),2) AS Kills, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(Kills) DESC
-        LIMIT 5;"""
-        player_average_kills_overall = pd.read_sql(sql_query, conn)
-
         st.header(":blue[Elimination Expert]")
-
-        display_card_table2(player_average_kills_overall,"most_kills")
+        draw_player_card_by_metric("Kills")
 
 with col4:
     with st.container(border=True):
-
-        sql_query = """SELECT Name, ROUND(AVG(Assists),2) AS Assists, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(Assists) DESC
-        LIMIT 5;"""
-        player_average_assists_overall = pd.read_sql(sql_query, conn)
-
         st.header(":blue[Support Master]") 
-
-        display_card_table2(player_average_assists_overall,"most_assists")
+        draw_player_card_by_metric("Assists")
 
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(Kast),2) AS Kast, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(Kast) DESC
-        LIMIT 5;"""
-        player_average_kast_overall = pd.read_sql(sql_query, conn)
-
         st.header(":blue[Team Architect]") 
-
-        display_card_table2(player_average_kast_overall,"most_kast")
+        draw_player_card_by_metric("Kast")
 
 with col6:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(ADR),2) AS ADR, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(ADR) DESC
-        LIMIT 5;"""
-        player_average_adr_overall = pd.read_sql(sql_query, conn)
-
         st.header(":blue[Consistent Impact]") 
-
-        display_card_table2(player_average_adr_overall,"most_adr")
+        draw_player_card_by_metric("ADR")
     
 with col7:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(HSRate),2) AS HSRate, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(HSRate) DESC
-        LIMIT 5;"""
-        player_average_hs_overall = pd.read_sql(sql_query, conn)
-
         st.header(":blue[Sharpshooting Champion]") 
-
-        display_card_table2(player_average_hs_overall,"most_hs")
+        draw_player_card_by_metric("HSRate")
 
 with col8:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(FirstKills),2) AS FirstKills, Team
-        FROM test_data
-        GROUP BY Name
-        ORDER BY AVG(FirstKills) DESC
-        LIMIT 5;"""
-        player_average_fk_overall = pd.read_sql(sql_query, conn)
-
         st.header(":blue[Aggressive Strategist]") 
-
-        display_card_table2(player_average_fk_overall,"most_fk")
+        draw_player_card_by_metric("FirstKills")
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################

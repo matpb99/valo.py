@@ -6,6 +6,18 @@ import plotly.express as px
 from streamlit_card import card
 from sqlite3 import connect
 
+def init_data():
+    players_maps_data_df = pd.read_csv("player_data_by_map.csv")
+    with open("last_update.txt", "r") as archivo:
+        last_update = archivo.read()
+
+    return players_maps_data_df, last_update
+
+def init_conn(df):
+    conn = connect(':memory:')
+    df.to_sql(name='test_data', con=conn)
+    return conn
+        
 def load_image(filename, folder):
     with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
         data = f.read()
@@ -16,25 +28,31 @@ def load_image(filename, folder):
 def merge_image(filename1, folder1, filename2, folder2):
     pass
 
-def display_card_table(df_data, metric):
+def draw_teams_match_card_by_metric(metric):
 
-    metric_key = translate_dict.get(metric)
+    sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG({}),3) AS {}, Date
+        FROM test_data
+        GROUP BY MatchKey
+        ORDER BY AVG({}) DESC
+        LIMIT 5;""".format(metric, metric,metric)
+    
+    df_data = pd.read_sql(sql_query, conn)
 
-    if metric_key == "FirstKills" or metric_key == "Kills" or metric_key == "Assists":
+    if metric == "FirstKills" or metric == "Kills" or metric == "Assists":
         prefix = ""
     else:
         prefix = "Average "
 
-    localteam, visitteam, value = df_data["LocalTeam"][0], df_data["VisitTeam"][0],  df_data[metric_key][0]
+    localteam, visitteam, value = df_data["LocalTeam"][0], df_data["VisitTeam"][0],  df_data[metric][0]
 
     colx, coly = st.columns(2)
 
-    text = "Most {}{} by Both Teams in All VCTs".format(prefix, metric_key)
+    text = "Most {}{} by Both Teams in All VCTs".format(prefix, metric)
 
     with colx:
-        card_list.append(card(
+        card(
             title = str(localteam.upper()),
-            text = "",
+            text = "{} {} {} by Both Teams".format(prefix, value, metric),
             image = load_image(localteam, "Teams"),
             styles={
                 "card": {
@@ -42,13 +60,12 @@ def display_card_table(df_data, metric):
                     "height": "300px"
                         }
                     }
-                                )
-        )
+             )
 
     with coly:
-        card_list.append(card(
+        card(
             title = str(visitteam.upper()),
-            text = "",
+            text = "{} {} {} by Both Teams".format(prefix, value, metric),
             image = load_image(visitteam, "Teams"),
             styles={
                 "card": {
@@ -56,89 +73,36 @@ def display_card_table(df_data, metric):
                     "height": "300px"
                         }
                     }
-                                )
-                             )
+            )
 
     st.header(text)
     st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-
-translate_dict = {
-    "most_acs" : "ACS",
-    "most_adr" : "ADR",
-    "most_assists" : "Assists",
-    "most_fk" : "FirstKills",
-    "most_hs" : "HSRate",
-    "most_kast" : "Kast",
-    "most_kills" : "Kills",
-    "most_rating" : "Rating"
-}
-card_list = list()
-
-players_maps_data_df = pd.read_csv("player_data_by_map.csv")
-conn = connect(':memory:')
-players_maps_data_df.to_sql(name='test_data', con=conn)
-
-with open("last_update.txt", "r") as archivo:
-    last_update = archivo.read()
-
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-
 st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
+players_maps_data_df, last_update = init_data()
+conn = init_conn(players_maps_data_df)
+
 st.header('Valo.py', divider='blue')
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
-
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-
 st.title("Top Matches")
 
 col1, col2 = st.columns(2)
 
 with col1:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(Rating),3) AS Rating, Date
-        FROM test_data
-        GROUP BY MatchKey
-        ORDER BY AVG(Rating) DESC
-        LIMIT 5;"""
-        match_average_rating_overall = pd.read_sql(sql_query, conn)
-        display_card_table(match_average_rating_overall,"most_rating")
+        draw_teams_match_card_by_metric("Rating")
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(ACS),2) AS ACS, Date
-        FROM test_data
-        GROUP BY MatchKey
-        ORDER BY AVG(ACS) DESC
-        LIMIT 5;"""
-        match_average_acs_overall = pd.read_sql(sql_query, conn)
-        display_card_table(match_average_acs_overall,"most_acs")
+        draw_teams_match_card_by_metric("ACS")
 
 col3, col4 = st.columns(2)
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam, VisitTeam, SUM(Kills) AS Kills, Date
-        FROM test_data
-        GROUP BY MatchKey
-        ORDER BY AVG(Kills) DESC
-        LIMIT 5;"""
-        match_kills_overall = pd.read_sql(sql_query, conn)
-        display_card_table(match_kills_overall,"most_kills")
+        draw_teams_match_card_by_metric("Kills")
 
 with col4:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(HSRate),2) AS HSRate, Date
-        FROM test_data
-        GROUP BY MatchKey
-        ORDER BY AVG(HSRate) DESC
-        LIMIT 5;"""
-        match_average_hs_overall = pd.read_sql(sql_query, conn)
-        display_card_table(match_average_hs_overall,"most_hs")
+        draw_teams_match_card_by_metric("HSRate")
