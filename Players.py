@@ -128,7 +128,7 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     with st.container(border=True):
         
-        sql_query = """SELECT Name, ROUND(AVG(Rating),3) AS Rating, Team
+        sql_query = """SELECT Name, ROUND(AVG(Rating),2) AS Rating, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(Rating) DESC
@@ -142,7 +142,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(ACS),3) AS ACS, Team
+        sql_query = """SELECT Name, ROUND(AVG(ACS),2) AS ACS, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(ACS) DESC
@@ -155,7 +155,7 @@ with col2:
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(Kills),3) AS Kills, Team
+        sql_query = """SELECT Name, ROUND(AVG(Kills),2) AS Kills, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(Kills) DESC
@@ -169,7 +169,7 @@ with col3:
 with col4:
     with st.container(border=True):
 
-        sql_query = """SELECT Name, ROUND(AVG(Assists),3) AS Assists, Team
+        sql_query = """SELECT Name, ROUND(AVG(Assists),2) AS Assists, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(Assists) DESC
@@ -184,7 +184,7 @@ col5, col6, col7, col8 = st.columns(4)
 
 with col5:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(Kast),3) AS Kast, Team
+        sql_query = """SELECT Name, ROUND(AVG(Kast),2) AS Kast, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(Kast) DESC
@@ -197,7 +197,7 @@ with col5:
 
 with col6:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(ADR),3) AS ADR, Team
+        sql_query = """SELECT Name, ROUND(AVG(ADR),2) AS ADR, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(ADR) DESC
@@ -210,7 +210,7 @@ with col6:
     
 with col7:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(HSRate),3) AS HSRate, Team
+        sql_query = """SELECT Name, ROUND(AVG(HSRate),2) AS HSRate, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(HSRate) DESC
@@ -223,7 +223,7 @@ with col7:
 
 with col8:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(FirstKills),3) AS FirstKills, Team
+        sql_query = """SELECT Name, ROUND(AVG(FirstKills),2) AS FirstKills, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(FirstKills) DESC
@@ -244,7 +244,7 @@ col9, col10, col11, col12 = st.columns(4)
 
 with col9:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(Rating),3) AS Rating, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, ROUND(AVG(Rating),2) AS Rating, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY PlayerMatchKey
         ORDER BY AVG(Rating) DESC
@@ -256,7 +256,7 @@ with col9:
 
 with col10:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(ACS),3) AS ACS, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, ROUND(AVG(ACS),2) AS ACS, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY PlayerMatchKey
         ORDER BY AVG(ACS) DESC
@@ -295,7 +295,7 @@ col13, col14, col15, col16 = st.columns(4)
 
 with col13:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(Kast),3) AS Kast, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, ROUND(AVG(Kast),2) AS Kast, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY PlayerMatchKey
         ORDER BY AVG(Kast) DESC
@@ -307,7 +307,7 @@ with col13:
 
 with col14:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(ADR),3) AS ADR, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, ROUND(AVG(ADR),2) AS ADR, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY PlayerMatchKey
         ORDER BY AVG(ADR) DESC
@@ -319,7 +319,7 @@ with col14:
 
 with col15:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(AVG(HSRate),3) AS HSRate, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, ROUND(AVG(HSRate),2) AS HSRate, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY PlayerMatchKey
         ORDER BY AVG(HSRate) DESC
@@ -351,7 +351,7 @@ col17, col18, col19, col20 = st.columns(4)
 
 with col17:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(Rating,3) AS Rating, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, Rating, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         ORDER BY Rating DESC
         LIMIT 5;"""
@@ -362,7 +362,7 @@ with col17:
 
 with col18:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(ACS,3) AS ACS, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, ACS, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         ORDER BY ACS DESC
         LIMIT 5;"""
@@ -397,7 +397,7 @@ col21, col22, col23, col24 = st.columns(4)
 
 with col21:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(Kast,3) AS Kast, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, Kast, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         ORDER BY Kast DESC
         LIMIT 5;"""
@@ -408,7 +408,7 @@ with col21:
 
 with col22:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(ADR,3) AS ADR, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, ADR, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         ORDER BY ADR DESC
         LIMIT 5;"""
@@ -419,7 +419,7 @@ with col22:
 
 with col23:
     with st.container(border=True):
-        sql_query = """SELECT Name, ROUND(HSRate,3) AS HSRate, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Name, HSRate, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         ORDER BY HSRate DESC
         LIMIT 5;"""

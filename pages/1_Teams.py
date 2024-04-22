@@ -141,7 +141,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(ACS),3) AS ACS
+        sql_query = """SELECT Team, ROUND(AVG(ACS),2) AS ACS
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(ACS) DESC
@@ -152,7 +152,7 @@ with col2:
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(Kills),3) AS Kills
+        sql_query = """SELECT Team, ROUND(AVG(Kills),2) AS Kills
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(Kills) DESC
@@ -163,7 +163,7 @@ with col3:
 
 with col4:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(Assists),3) AS Assists
+        sql_query = """SELECT Team, ROUND(AVG(Assists),2) AS Assists
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(Assists) DESC
@@ -187,7 +187,7 @@ with col5:
 
 with col6:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(ADR),3) AS ADR
+        sql_query = """SELECT Team, ROUND(AVG(ADR),2) AS ADR
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(ADR) DESC
@@ -209,7 +209,7 @@ with col7:
 
 with col8:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(FirstKills),3) AS FirstKills
+        sql_query = """SELECT Team, ROUND(AVG(FirstKills),2) AS FirstKills
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(FirstKills) DESC
@@ -239,7 +239,7 @@ with col9:
 
 with col10:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(ACS),3) AS ACS, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Team, ROUND(AVG(ACS),2) AS ACS, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY AVG(ACS) DESC
@@ -285,7 +285,7 @@ with col13:
 
 with col14:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(ADR),3) AS ADR, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Team, ROUND(AVG(ADR),2) AS ADR, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY AVG(ADR) DESC

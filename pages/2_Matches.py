@@ -113,7 +113,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(ACS),3) AS ACS, Date
+        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(ACS),2) AS ACS, Date
         FROM test_data
         GROUP BY MatchKey
         ORDER BY AVG(ACS) DESC
@@ -135,7 +135,7 @@ with col3:
 
 with col4:
     with st.container(border=True):
-        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(HSRate),3) AS HSRate, Date
+        sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG(HSRate),2) AS HSRate, Date
         FROM test_data
         GROUP BY MatchKey
         ORDER BY AVG(HSRate) DESC

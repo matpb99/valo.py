@@ -15,16 +15,16 @@ def load_image(filename, folder):
 
 def display_card_table(df_data, metric):
 
-    metric_key_value = translate_dict.get(metric)
+    metric_key = translate_dict.get(metric)
 
-    if metric_key_value == "FirstKills" or metric_key_value == "Kills" or metric_key_value == "Assists":
+    if metric_key == "FirstKills" or metric_key == "Kills" or metric_key == "Assists":
         prefix = ""
     else:
         prefix = "Average "
 
-    player, value = df_data["Name"][0], df_data[metric_key_value][0]
+    player, value = df_data["Name"][0], df_data[metric_key][0]
 
-    text = [str(value) + " {}".format(metric_key_value), "{}{} in All VCTs ".format(prefix, metric_key_value), "Played at least 4 maps"]
+    text = [str(value) + " {}".format(metric_key), "{}{} in All VCTs ".format(prefix, metric_key), "Played at least 4 maps"]
     title = str(player).capitalize()
 
     card_list.append(card(

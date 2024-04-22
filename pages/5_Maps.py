@@ -9,11 +9,11 @@ from sqlite3 import connect
 ## General   
 def display_card_table(df_data,metric):
 
-    metric_key_value = translate_dict.get(metric)
+    metric_key = translate_dict.get(metric)
 
-    agent, value = df_data["Agent"][0], df_data[metric_key_value][0]
+    agent, value = df_data["Agent"][0], df_data[metric_key][0]
 
-    text = [str(value) + " {}".format(metric_key_value), "Most Average {} per Map Played in All VCTs".format(category_key_value)]
+    text = [str(value) + " {}".format(metric_key), "Most Average {} per Map Played in All VCTs".format(metric_key)]
     title = str(agent).capitalize()
 
     card_list.append(card(

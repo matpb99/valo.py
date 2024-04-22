@@ -13,18 +13,13 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def display_card_table(df_data,category):
+def display_card_table(df_data, metric):
 
-    category_key_value = translate_dict.get(category)
+    metric_key = translate_dict.get(metric)
 
-    if category_key_value == "FirstKills" or category_key_value == "Kills" or category_key_value == "Assists":
-        prefix = ""
-    else:
-        prefix = "Average "
+    region, value = df_data["Tournament"][0], df_data[metric_key][0]
 
-    region, value = df_data["Tournament"][0], df_data[category_key_value][0]
-
-    text = [str(value) + " {}".format(category_key_value), "Most {}{} in All VCTs".format(prefix, category_key_value)]
+    text = [str(value) + " {}".format(metric_key), "Most Average {} per Map Played in All VCTs".format(metric_key)]
     title = str(region).capitalize()
 
     card_list.append(card(
@@ -102,20 +97,20 @@ with col2:
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT Tournament, SUM(Kills) AS Kills
+        sql_query = """SELECT Tournament, ROUND(AVG(Kills),2) AS Kills
         FROM test_data
         GROUP BY Tournament
-        ORDER BY SUM(Kills) DESC
+        ORDER BY AVG(Kills) DESC
         LIMIT 3;"""
         regions_kills_overall = pd.read_sql(sql_query, conn)
         display_card_table(regions_kills_overall,"most_kills")
 
 with col4:
     with st.container(border=True):
-        sql_query = """SELECT Tournament, SUM(FirstKills) AS FirstKills
+        sql_query = """SELECT Tournament, ROUND(AVG(FirstKills),2) AS FirstKills
         FROM test_data
         GROUP BY Tournament
-        ORDER BY SUM(FirstKills)DESC
+        ORDER BY AVG(FirstKills) DESC
         LIMIT 3;"""
         regions_fk_overall = pd.read_sql(sql_query, conn)
         display_card_table(regions_fk_overall,"most_fk")
