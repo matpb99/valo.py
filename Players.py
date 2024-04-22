@@ -27,7 +27,7 @@ def load_image(filename, folder):
 
 def draw_player_card_by_metric(metric):
 
-    if metric == "Rating" or "HSRate":
+    if metric == "Rating" or metric == "HSRate":
         round_value = 3
     else:
         round_value = 2
