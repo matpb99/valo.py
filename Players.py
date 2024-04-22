@@ -71,7 +71,6 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-@st.cache_data
 def return_query(sql_query):
     df = pd.read_sql(sql_query, conn)
     return df

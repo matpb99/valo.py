@@ -1,3 +1,5 @@
+
+
 import base64
 import streamlit as st
 import pandas as pd
@@ -6,16 +8,10 @@ import plotly.express as px
 from streamlit_card import card
 from sqlite3 import connect
 
-def load_image(filename, folder):
-    with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
-        data = f.read()
-        encoded = base64.b64encode(data)
-    data = "data:image/png;base64," + encoded.decode("utf-8")
-    return data
 #Detalle
 def display_card_table(df_data,category1,category3):
 
-    category_key_value = translate_dict.get(category3)
+    category_key_value = metrics_dict.get(category3)
 
     if category_key_value == "FirstKills" or category_key_value == "Kills" or category_key_value == "Assists":
         prefix = ""
@@ -50,7 +46,7 @@ def display_card_table(df_data,category1,category3):
 ## General   
 def display_card_table2(df_data,category2):
 
-    category_key_value = translate_dict.get(category2)
+    category_key_value = metrics_dict.get(category2)
 
     team, value = df_data["Team"][0], df_data[category_key_value][0]
 
@@ -72,12 +68,37 @@ def display_card_table2(df_data,category2):
 
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
+  
+@st.cache_data
+def load_image(filename, folder):
+    with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
+        data = f.read()
+        encoded = base64.b64encode(data)
+    data = "data:image/png;base64," + encoded.decode("utf-8")
+    return data
+
+def return_query(sql_query):
+    df = pd.read_sql(sql_query, conn)
+    return df
+
+@st.cache_data
+def init_data():
+    players_maps_data_df = pd.read_csv("player_data_by_map.csv")
+    with open("last_update.txt", "r") as archivo:
+        last_update = archivo.read()
+
+    return players_maps_data_df, last_update
+
+def init_conn(df):
+    conn = connect(':memory:')
+    df.to_sql(name='test_data', con=conn)
+    return conn
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 
-translate_dict = {
+metrics_dict = {
     "most_acs" : "ACS",
     "most_adr" : "ADR",
     "most_assists" : "Assists",
@@ -87,29 +108,27 @@ translate_dict = {
     "most_kills" : "Kills",
     "most_rating" : "Rating"
 }
+
 card_list = list()
 
-players_maps_data_df = pd.read_csv("player_data_by_map.csv")
-conn = connect(':memory:')
-players_maps_data_df.to_sql(name='test_data', con=conn)
-
-with open("last_update.txt", "r") as archivo:
-    last_update = archivo.read()
-
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-###############################################################################################################################################################################################################
-
 st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
+
+players_maps_data_df, last_update = init_data()
+
+conn = init_conn(players_maps_data_df)
+
+###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
+
 st.header('Valo.py', divider='blue')
-st.sidebar.header("Categories")
-st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024]")
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
 
-st.title("Top Teams")
+st.title("Top Teams Overall")
 
 col1, col2, col3, col4 = st.columns(4)
 
