@@ -13,18 +13,18 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def display_card_table(df_data, role_name, category):
+def display_card_table(df_data, metric):
 
-    category_key_value = translate_dict.get(category)
+    metric_key_value = translate_dict.get(metric)
 
-    if category_key_value == "FirstKills" or category_key_value == "Kills" or category_key_value == "Assists":
+    if metric_key_value == "FirstKills" or metric_key_value == "Kills" or metric_key_value == "Assists":
         prefix = ""
     else:
         prefix = "Average "
 
-    player, value = df_data["Name"][0], df_data[category_key_value][0]
+    player, value = df_data["Name"][0], df_data[metric_key_value][0]
 
-    text = [str(value) + " {}".format(category_key_value), "{}{} in All VCTs ".format( prefix, category_key_value), "Played at least 4 maps"]
+    text = [str(value) + " {}".format(metric_key_value), "{}{} in All VCTs ".format(prefix, metric_key_value), "Played at least 4 maps"]
     title = str(player).capitalize()
 
     card_list.append(card(
@@ -40,6 +40,28 @@ def display_card_table(df_data, role_name, category):
                             )
     )
     st.subheader("Top 3 Ranking")
+    st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
+
+def display_card_table2(df_data, rol_name):
+
+    agent, value = df_data["Agent"][0], df_data["MapsPlayed"][0]
+
+    text = [str(value) + " Maps Played", " Most {} Played in All VCTs ".format(rol_name)]
+    title = str(agent).capitalize()
+
+    card_list.append(card(
+        title = title,
+        text = text,
+        image = load_image(agent, "agents"),
+        styles={
+            "card": {
+                "width": "100%",
+                "height": "400px"
+                    }
+                }
+                            )
+    )
+    st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 ###############################################################################################################################################################################################################
@@ -96,7 +118,7 @@ with col1:
 
         st.header(":blue[Best Duelist]")
 
-        display_card_table(duelist_rating,"duelist","most_rating")
+        display_card_table(duelist_rating,"most_rating")
 
 with col2:
     with st.container(border=True):
@@ -112,7 +134,7 @@ with col2:
 
         st.header(":red[Best Sentinel]")
 
-        display_card_table(sentinel_rating,"sentinel","most_rating")
+        display_card_table(sentinel_rating,"most_rating")
 
 with col3:
     with st.container(border=True):
@@ -128,7 +150,7 @@ with col3:
 
         st.header(":white[Best Controller]")
 
-        display_card_table(controller_rating,"controller","most_rating")
+        display_card_table(controller_rating,"most_rating")
 
 with col4:
     with st.container(border=True):
@@ -144,4 +166,69 @@ with col4:
 
         st.header(":orange[Best Initiator]")
 
-        display_card_table(initiator_rating,"initiator","most_rating")
+        display_card_table(initiator_rating,"most_rating")
+
+
+st.title("Most Played")
+
+col5, col6, col7, col8 = st.columns(4)
+
+with col5:
+    with st.container(border=True):
+        sql_query = """SELECT Agent, COUNT(Agent) AS MapsPlayed
+        FROM test_data
+        WHERE Role=="duelist" 
+        GROUP BY Agent
+        ORDER BY COUNT(Agent) DESC
+        LIMIT 5;"""
+
+        duelist_played = pd.read_sql(sql_query, conn)
+
+        st.header(":blue[Most Played Duelist]")
+
+        display_card_table2(duelist_played,"duelist")
+
+with col6:
+    with st.container(border=True):
+        sql_query = """SELECT Agent, COUNT(Agent) AS MapsPlayed
+        FROM test_data
+        WHERE Role=="sentinel" 
+        GROUP BY Agent
+        ORDER BY COUNT(Agent) DESC
+        LIMIT 5;"""
+
+        sentinel_played = pd.read_sql(sql_query, conn)
+
+        st.header(":red[Most Played Sentinel]")
+
+        display_card_table2(sentinel_played,"sentinel")
+
+with col7:
+    with st.container(border=True):
+        sql_query = """SELECT Agent, COUNT(Agent) AS MapsPlayed
+        FROM test_data
+        WHERE Role=="controller" 
+        GROUP BY Agent
+        ORDER BY COUNT(Agent) DESC
+        LIMIT 5;"""
+
+        controller_played = pd.read_sql(sql_query, conn)
+
+        st.header(":white[Most Played Controller]")
+
+        display_card_table2(controller_played,"controller")
+
+with col8:
+    with st.container(border=True):
+        sql_query = """SELECT Agent, COUNT(Agent) AS MapsPlayed
+        FROM test_data
+        WHERE Role=="initiator" 
+        GROUP BY Agent
+        ORDER BY COUNT(Agent) DESC
+        LIMIT 5;"""
+
+        initiator_played = pd.read_sql(sql_query, conn)
+
+        st.header(":orange[Most Played Initiator]")
+
+        display_card_table2(initiator_played,"initiator")
