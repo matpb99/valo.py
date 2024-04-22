@@ -25,7 +25,7 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def draw_map_composition(map_name):
+def draw_agent_map_composition(map_name):
 
     with st.container(border=True):
 
@@ -72,19 +72,18 @@ conn = init_conn(players_maps_data_df)
 st.header('Valo.py', divider='blue')
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 
-
 st.title("Top Composition By Maps")
 
-draw_map_composition("Sunset")
+draw_agent_map_composition("Sunset")
 
-draw_map_composition("Lotus")
+draw_agent_map_composition("Lotus")
 
-draw_map_composition("Breeze")
+draw_agent_map_composition("Breeze")
 
-draw_map_composition("Icebox")
+draw_agent_map_composition("Icebox")
 
-draw_map_composition("Bind")
+draw_agent_map_composition("Bind")
 
-draw_map_composition("Split")
+draw_agent_map_composition("Split")
 
-draw_map_composition("Ascent")
+draw_agent_map_composition("Ascent")
