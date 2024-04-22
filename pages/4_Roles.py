@@ -27,8 +27,6 @@ def load_image(filename, folder):
 
 def draw_player_rol_card_by_metric(role_name, metric):
 
-    st.header(":{}[Best {}]".format(color, role_name.capitalize()))
-
     if role_name == "duelist":
         color = "blue"
     elif role_name == "sentinel":
@@ -37,6 +35,8 @@ def draw_player_rol_card_by_metric(role_name, metric):
         color = "white"
     else:
         color = "orange"
+
+    st.header(":{}[Best {}]".format(color, role_name.capitalize()))
 
     if metric == "FirstKills" or metric == "Kills" or metric == "Assists":
         prefix = ""
