@@ -93,8 +93,6 @@ with open("last_update.txt", "r") as archivo:
 
 st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
 st.header('Valo.py', divider='blue')
-st.sidebar.header("Categories")
-st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024]")
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 
 ###############################################################################################################################################################################################################

@@ -1,5 +1,3 @@
-
-
 import base64
 import streamlit as st
 import pandas as pd
@@ -143,7 +141,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(ACS),2) AS ACS
+        sql_query = """SELECT Team, ROUND(AVG(ACS),3) AS ACS
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(ACS) DESC
@@ -154,7 +152,7 @@ with col2:
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(Kills),2) AS Kills
+        sql_query = """SELECT Team, ROUND(AVG(Kills),3) AS Kills
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(Kills) DESC
@@ -165,7 +163,7 @@ with col3:
 
 with col4:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(Assists),2) AS Assists
+        sql_query = """SELECT Team, ROUND(AVG(Assists),3) AS Assists
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(Assists) DESC
@@ -178,7 +176,7 @@ col5, col6, col7, col8 = st.columns(4)
 
 with col5:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(Kast),2) AS Kast
+        sql_query = """SELECT Team, ROUND(AVG(Kast),3) AS Kast
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(Kast) DESC
@@ -189,7 +187,7 @@ with col5:
 
 with col6:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(ADR),2) AS ADR
+        sql_query = """SELECT Team, ROUND(AVG(ADR),3) AS ADR
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(ADR) DESC
@@ -200,7 +198,7 @@ with col6:
     
 with col7:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate
+        sql_query = """SELECT Team, ROUND(AVG(HSRate),3) AS HSRate
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(HSRate) DESC
@@ -211,7 +209,7 @@ with col7:
 
 with col8:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(FirstKills),2) AS FirstKills
+        sql_query = """SELECT Team, ROUND(AVG(FirstKills),3) AS FirstKills
         FROM test_data
         GROUP BY Team
         ORDER BY AVG(FirstKills) DESC
