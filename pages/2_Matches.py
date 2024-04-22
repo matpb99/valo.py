@@ -13,22 +13,25 @@ def load_image(filename, folder):
     data = "data:image/png;base64," + encoded.decode("utf-8")
     return data
 
-def display_card_table(df_data, category):
+def merge_image(filename1, folder1, filename2, folder2):
+    pass
 
-    category_key_value = translate_dict.get(category)
+def display_card_table(df_data, metric):
 
-    if category_key_value == "FirstKills" or category_key_value == "Kills" or category_key_value == "Assists":
+    metric_key = translate_dict.get(metric)
+
+    if metric_key == "FirstKills" or metric_key == "Kills" or metric_key == "Assists":
         prefix = ""
     else:
         prefix = "Average "
 
-    localteam, visitteam, value = df_data["LocalTeam"][0], df_data["VisitTeam"][0],  df_data[category_key_value][0]
+    localteam, visitteam, value = df_data["LocalTeam"][0], df_data["VisitTeam"][0],  df_data[metric_key][0]
 
-    col1, col2 = st.columns(2)
+    colx, coly = st.columns(2)
 
-    text = "Most {}{} by Both Teams in All VCTs".format(prefix, category_key_value)
+    text = "Most {}{} by Both Teams in All VCTs".format(prefix, metric_key)
 
-    with col1:
+    with colx:
         card_list.append(card(
             title = str(localteam.upper()),
             text = "",
@@ -36,13 +39,13 @@ def display_card_table(df_data, category):
             styles={
                 "card": {
                     "width": "100%",
-                    "height": "350px"
+                    "height": "300px"
                         }
                     }
                                 )
         )
 
-    with col2:
+    with coly:
         card_list.append(card(
             title = str(visitteam.upper()),
             text = "",
@@ -50,7 +53,7 @@ def display_card_table(df_data, category):
             styles={
                 "card": {
                     "width": "100%",
-                    "height": "350px"
+                    "height": "300px"
                         }
                     }
                                 )
@@ -98,7 +101,7 @@ st.subheader("_Last Update:_ :green[{}]".format(last_update))
 
 st.title("Top Matches")
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2 = st.columns(2)
 
 with col1:
     with st.container(border=True):
@@ -119,6 +122,8 @@ with col2:
         LIMIT 5;"""
         match_average_acs_overall = pd.read_sql(sql_query, conn)
         display_card_table(match_average_acs_overall,"most_acs")
+
+col3, col4 = st.columns(2)
 
 with col3:
     with st.container(border=True):
