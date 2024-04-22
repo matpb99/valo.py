@@ -69,7 +69,6 @@ def display_card_table2(df_data,category2):
     st.header("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
   
-@st.cache_data
 def load_image(filename, folder):
     with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
         data = f.read()
@@ -81,7 +80,6 @@ def return_query(sql_query):
     df = pd.read_sql(sql_query, conn)
     return df
 
-@st.cache_data
 def init_data():
     players_maps_data_df = pd.read_csv("player_data_by_map.csv")
     with open("last_update.txt", "r") as archivo:
