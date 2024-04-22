@@ -33,12 +33,12 @@ def draw_agent_card_by_metric(agent_name, metric):
         prefix = "Average "
 
     sql_query = """SELECT Name, COUNT(Agent) AS MapsPlayed, ROUND(AVG({}),2) AS {}, Team
-        FROM test_data
-        WHERE Agent=="{}" 
-        GROUP BY Name
-        HAVING COUNT(Agent)>=3
-        ORDER BY AVG({}) DESC
-        LIMIT 3;""".format(metric, metric, agent_name, metric)
+                    FROM test_data
+                    WHERE Agent=="{}" 
+                    GROUP BY Name
+                    HAVING COUNT(Agent)>=3
+                    ORDER BY AVG({}) DESC
+                    LIMIT 3;""".format(metric, metric, agent_name, metric)
 
     df_data = pd.read_sql(sql_query, conn)
 

@@ -35,10 +35,10 @@ def draw_team_card_by_metric(metric):
         round_value = 2
 
     sql_query = """SELECT Team, ROUND(AVG({}),{}) AS {}
-                        FROM test_data
-                        GROUP BY Team
-                        ORDER BY AVG({}) DESC
-                        LIMIT 5;""".format(metric, round_value, metric, metric)
+                    FROM test_data
+                    GROUP BY Team
+                    ORDER BY AVG({}) DESC
+                    LIMIT 5;""".format(metric, round_value, metric, metric)
     
     df_data = pd.read_sql(sql_query, conn)
 
@@ -80,16 +80,16 @@ def draw_team_map_card_by_metric(metric):
         prefix = "Average "
 
     sql_query = """SELECT Team, {} AS {}, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
-                        FROM test_data
-                        GROUP BY TeamMapKey
-                        ORDER BY {} DESC
-                        LIMIT 5;""".format(filter_data, metric, group_filter)
+                    FROM test_data
+                    GROUP BY TeamMapKey
+                    ORDER BY {} DESC
+                    LIMIT 5;""".format(filter_data, metric, group_filter)
 
     df_data = pd.read_sql(sql_query, conn)
 
     
     team, value, matchteams = df_data["Team"][0], df_data[metric][0], df_data["MatchTeams"][0]
-    text = [str(value) +" {}".format(metric), "Most {}{} in One Match by Teams in All VCTs".format(prefix, metric), matchteams]
+    text = [str(value) +" {}".format(metric), "Most {}{} in One Single Map by Teams in All VCTs".format(prefix, metric), matchteams]
     title = str(team).upper()
 
     card(

@@ -32,11 +32,11 @@ def draw_agent_map_composition(map_name):
         st.title("{}".format(map_name))
 
         sql_query = """SELECT Agent, COUNT(Agent) AS Times, Role
-        FROM test_data
-        WHERE Map == "{}"
-        GROUP BY Agent
-        ORDER BY COUNT(Agent) DESC
-        LIMIT 5;""".format(map_name)
+                        FROM test_data
+                        WHERE Map == "{}"
+                        GROUP BY Agent
+                        ORDER BY COUNT(Agent) DESC
+                        LIMIT 5;""".format(map_name)
 
         df_data = pd.read_sql(sql_query, conn)
 

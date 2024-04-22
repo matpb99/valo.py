@@ -36,13 +36,13 @@ def draw_teams_match_card_by_metric(metric):
         prefix = "Average "
         
     sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG({}),3) AS {}, Date
-        FROM test_data
-        GROUP BY MatchKey
-        ORDER BY AVG({}) DESC
-        LIMIT 5;""".format(metric, metric,metric)
+                    FROM test_data
+                    GROUP BY MatchKey
+                    ORDER BY AVG({}) DESC
+                    LIMIT 5;""".format(metric, metric,metric)
     
     df_data = pd.read_sql(sql_query, conn)
-    
+
     localteam, visitteam, value = df_data["LocalTeam"][0], df_data["VisitTeam"][0],  df_data[metric][0]
 
     colx, coly = st.columns(2)

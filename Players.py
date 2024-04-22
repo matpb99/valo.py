@@ -33,10 +33,10 @@ def draw_player_card_by_metric(metric):
         round_value = 2
 
     sql_query = """SELECT Name, ROUND(AVG({}),{}) AS {}, Team
-                        FROM test_data
-                        GROUP BY Name
-                        ORDER BY AVG({}) DESC
-                        LIMIT 5;""".format(metric, round_value, metric, metric)
+                    FROM test_data
+                    GROUP BY Name
+                    ORDER BY AVG({}) DESC
+                    LIMIT 5;""".format(metric, round_value, metric, metric)
     
     df_data = pd.read_sql(sql_query, conn)
 
@@ -75,10 +75,10 @@ def draw_player_match_card_by_metric(metric):
         group_filter = "AVG({})".format(metric)
 
     sql_query = """SELECT Name, {} AS {}, Team, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
-                        FROM test_data
-                        GROUP BY PlayerMatchKey
-                        ORDER BY {} DESC
-                        LIMIT 5;""".format(filter_data, metric, group_filter)
+                    FROM test_data
+                    GROUP BY PlayerMatchKey
+                    ORDER BY {} DESC
+                    LIMIT 5;""".format(filter_data, metric, group_filter)
     
     df_data = pd.read_sql(sql_query, conn)
 
@@ -104,9 +104,9 @@ def draw_player_match_card_by_metric(metric):
 def draw_player_map_card_by_metric(metric):
 
     sql_query = """SELECT Name, {}, Team, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
-                        FROM test_data
-                        ORDER BY {} DESC
-                        LIMIT 5;""".format(metric, metric)
+                    FROM test_data
+                    ORDER BY {} DESC
+                    LIMIT 5;""".format(metric, metric)
 
     df_data = pd.read_sql(sql_query, conn)
 

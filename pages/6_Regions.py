@@ -33,10 +33,10 @@ def draw_region_card_by_metric(metric):
         round_value = 2
 
     sql_query = """SELECT Tournament, ROUND(AVG({}),{}) AS {}
-        FROM test_data
-        GROUP BY Tournament
-        ORDER BY AVG({}) DESC
-        LIMIT 3;""".format(metric, round_value, metric, metric)
+                    FROM test_data
+                    GROUP BY Tournament
+                    ORDER BY AVG({}) DESC
+                    LIMIT 3;""".format(metric, round_value, metric, metric)
     
     df_data = pd.read_sql(sql_query, conn)
 

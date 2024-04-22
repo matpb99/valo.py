@@ -31,7 +31,7 @@ def draw_player_rol_card_by_metric(role_name, metric):
         prefix = ""
     else:
         prefix = "Average "
-        
+
     if role_name == "duelist":
         color = "blue"
     elif role_name == "sentinel":
@@ -49,12 +49,12 @@ def draw_player_rol_card_by_metric(role_name, metric):
         prefix = "Average "
 
     sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG({}),2) AS {}, Team
-        FROM test_data
-        WHERE Role=="{}" 
-        GROUP BY Name
-        HAVING COUNT(Role)>=4
-        ORDER BY AVG({}) DESC
-        LIMIT 3;""".format(metric, metric, role_name, metric)
+                    FROM test_data
+                    WHERE Role=="{}" 
+                    GROUP BY Name
+                    HAVING COUNT(Role)>=4
+                    ORDER BY AVG({}) DESC
+                    LIMIT 3;""".format(metric, metric, role_name, metric)
 
     df_data = pd.read_sql(sql_query, conn)
 
@@ -80,11 +80,11 @@ def draw_player_rol_card_by_metric(role_name, metric):
 def draw_agent_rol_card_by_times_played(role_name):
     
     sql_query = """SELECT Agent, COUNT(Agent) AS MapsPlayed
-        FROM test_data
-        WHERE Role=="{}" 
-        GROUP BY Agent
-        ORDER BY COUNT(Agent) DESC
-        LIMIT 5;""".format(role_name)
+                    FROM test_data
+                    WHERE Role=="{}" 
+                    GROUP BY Agent
+                    ORDER BY COUNT(Agent) DESC
+                    LIMIT 5;""".format(role_name)
 
     df_data = pd.read_sql(sql_query, conn)
 
