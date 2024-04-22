@@ -133,7 +133,7 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     with st.container(border=True):
         
-        sql_query = """SELECT Name, ROUND(AVG(Rating),2) AS Rating, Team
+        sql_query = """SELECT Name, ROUND(AVG(Rating),3) AS Rating, Team
         FROM test_data
         GROUP BY Name
         ORDER BY AVG(Rating) DESC
