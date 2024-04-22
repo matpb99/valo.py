@@ -27,6 +27,11 @@ def load_image(filename, folder):
 
 def draw_player_rol_card_by_metric(role_name, metric):
 
+    if metric == "FirstKills" or metric == "Kills" or metric == "Assists":
+        prefix = ""
+    else:
+        prefix = "Average "
+        
     if role_name == "duelist":
         color = "blue"
     elif role_name == "sentinel":

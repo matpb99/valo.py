@@ -30,6 +30,11 @@ def merge_image(filename1, folder1, filename2, folder2):
 
 def draw_teams_match_card_by_metric(metric):
 
+    if metric == "FirstKills" or metric == "Kills" or metric == "Assists":
+        prefix = ""
+    else:
+        prefix = "Average "
+        
     sql_query = """SELECT LocalTeam, VisitTeam, ROUND(AVG({}),3) AS {}, Date
         FROM test_data
         GROUP BY MatchKey
@@ -37,12 +42,7 @@ def draw_teams_match_card_by_metric(metric):
         LIMIT 5;""".format(metric, metric,metric)
     
     df_data = pd.read_sql(sql_query, conn)
-
-    if metric == "FirstKills" or metric == "Kills" or metric == "Assists":
-        prefix = ""
-    else:
-        prefix = "Average "
-
+    
     localteam, visitteam, value = df_data["LocalTeam"][0], df_data["VisitTeam"][0],  df_data[metric][0]
 
     colx, coly = st.columns(2)
