@@ -202,17 +202,6 @@ with col6:
     
 with col7:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(FirstKills),2) AS FirstKills
-        FROM test_data
-        GROUP BY Team
-        ORDER BY AVG(FirstKills) DESC
-        LIMIT 5;"""
-        team_average_fk_overall = pd.read_sql(sql_query, conn)
-
-        display_card_table2(team_average_fk_overall,"most_fk")
-
-with col8:
-    with st.container(border=True):
         sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate
         FROM test_data
         GROUP BY Team
@@ -221,7 +210,18 @@ with col8:
         team_average_hs_overall = pd.read_sql(sql_query, conn)
 
         display_card_table2(team_average_hs_overall,"most_hs")
-    
+
+with col8:
+    with st.container(border=True):
+        sql_query = """SELECT Team, ROUND(AVG(FirstKills),2) AS FirstKills
+        FROM test_data
+        GROUP BY Team
+        ORDER BY AVG(FirstKills) DESC
+        LIMIT 5;"""
+        team_average_fk_overall = pd.read_sql(sql_query, conn)
+
+        display_card_table2(team_average_fk_overall,"most_fk")
+   
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
@@ -232,7 +232,7 @@ col9, col10, col11, col12 = st.columns(4)
 
 with col9:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(Rating),2) AS Rating, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Team, ROUND(AVG(Rating),3) AS Rating, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY AVG(Rating) DESC
@@ -243,6 +243,17 @@ with col9:
 
 with col10:
     with st.container(border=True):
+        sql_query = """SELECT Team, ROUND(AVG(ACS),3) AS ACS, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY AVG(ACS) DESC
+        LIMIT 5;"""
+
+        team_average_acs_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_average_acs_map,"maps","most_acs")
+
+with col11:
+    with st.container(border=True):
         sql_query = """SELECT Team, SUM(Kills) AS Kills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
@@ -252,9 +263,44 @@ with col10:
         team_kills_map = pd.read_sql(sql_query, conn)
         display_card_table(team_kills_map,"maps","most_kills")
 
-with col11:
+with col12:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        sql_query = """SELECT Team, SUM(Assists) AS Assists, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY SUM(Assists) DESC
+        LIMIT 5;"""
+
+        team_assists_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_assists_map,"maps","most_assists")
+
+col13, col14, col15, col16 = st.columns(4)
+
+with col13:
+    with st.container(border=True):
+        sql_query = """SELECT Team, ROUND(AVG(Kast),3) AS Kast, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY AVG(Kast) DESC
+        LIMIT 5;"""
+
+        team_average_kast_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_average_kast_map,"maps","most_kast")
+
+with col14:
+    with st.container(border=True):
+        sql_query = """SELECT Team, ROUND(AVG(ADR),3) AS ADR, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
+        FROM test_data
+        GROUP BY TeamMapKey
+        ORDER BY AVG(ADR) DESC
+        LIMIT 5;"""
+
+        team_average_adr_map = pd.read_sql(sql_query, conn)
+        display_card_table(team_average_adr_map,"maps","most_adr")
+
+with col15:
+    with st.container(border=True):
+        sql_query = """SELECT Team, ROUND(AVG(HSRate),3) AS HSRate, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY AVG(HSRate) DESC
@@ -262,8 +308,8 @@ with col11:
 
         team_average_hs_map = pd.read_sql(sql_query, conn)
         display_card_table(team_average_hs_map,"maps","most_hs")
-      
-with col12:
+
+with col16:
     with st.container(border=True):
         sql_query = """SELECT Team, SUM(FirstKills) AS FirstKills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
@@ -274,7 +320,6 @@ with col12:
         team_fk_map = pd.read_sql(sql_query, conn)
         display_card_table(team_fk_map,"maps","most_fk")
 
-        
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
 ###############################################################################################################################################################################################################
