@@ -83,6 +83,8 @@ with col1:
         ORDER BY AVG(Rating) DESC
         LIMIT 3;"""
         regions_average_rating_overall = pd.read_sql(sql_query, conn)
+
+        st.header("Best League Overall")
         display_card_table(regions_average_rating_overall,"most_rating")
 
 with col2:
@@ -93,6 +95,8 @@ with col2:
         ORDER BY AVG(ACS) DESC
         LIMIT 3;"""
         regions_average_acs_overall = pd.read_sql(sql_query, conn)
+
+        st.header("Best Combat Skill League")
         display_card_table(regions_average_acs_overall,"most_acs")
 
 with col3:
@@ -103,6 +107,8 @@ with col3:
         ORDER BY AVG(Kills) DESC
         LIMIT 3;"""
         regions_kills_overall = pd.read_sql(sql_query, conn)
+
+        st.header("Most Intense League")
         display_card_table(regions_kills_overall,"most_kills")
 
 with col4:
@@ -113,4 +119,5 @@ with col4:
         ORDER BY AVG(FirstKills) DESC
         LIMIT 3;"""
         regions_fk_overall = pd.read_sql(sql_query, conn)
+        st.header("Most Agressive League")
         display_card_table(regions_fk_overall,"most_fk")
