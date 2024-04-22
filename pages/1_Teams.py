@@ -213,7 +213,7 @@ col9, col10, col11, col12 = st.columns(4)
 
 with col9:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(Rating),2) AS Rating, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        sql_query = """SELECT Team, ROUND(AVG(Rating),2) AS Rating, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY AVG(Rating) DESC
@@ -224,7 +224,7 @@ with col9:
 
 with col10:
     with st.container(border=True):
-        sql_query = """SELECT Team, SUM(Kills) AS Kills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        sql_query = """SELECT Team, SUM(Kills) AS Kills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY SUM(Kills) DESC
@@ -235,7 +235,7 @@ with col10:
 
 with col11:
     with st.container(border=True):
-        sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        sql_query = """SELECT Team, ROUND(AVG(HSRate),2) AS HSRate, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY AVG(HSRate) DESC
@@ -246,7 +246,7 @@ with col11:
       
 with col12:
     with st.container(border=True):
-        sql_query = """SELECT Team, SUM(FirstKills) AS FirstKills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, DateStandar AS Date
+        sql_query = """SELECT Team, SUM(FirstKills) AS FirstKills, Map, LocalTeam || " VS " || VisitTeam AS MatchTeams, Date
         FROM test_data
         GROUP BY TeamMapKey
         ORDER BY SUM(FirstKills) DESC

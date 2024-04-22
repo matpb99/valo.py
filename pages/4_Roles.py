@@ -106,7 +106,7 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     with st.container(border=True):
-        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating
+        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating, Team
         FROM test_data
         WHERE Role=="duelist" 
         GROUP BY Name
@@ -122,7 +122,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating
+        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating, Team
         FROM test_data
         WHERE Role=="sentinel" 
         GROUP BY Name
@@ -138,7 +138,7 @@ with col2:
 
 with col3:
     with st.container(border=True):
-        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating
+        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating, Team
         FROM test_data
         WHERE Role=="controller" 
         GROUP BY Name
@@ -154,7 +154,7 @@ with col3:
 
 with col4:
     with st.container(border=True):
-        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating
+        sql_query = """SELECT Name, COUNT(Role) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating, Team
         FROM test_data
         WHERE Role=="initiator" 
         GROUP BY Name
