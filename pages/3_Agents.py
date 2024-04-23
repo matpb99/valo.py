@@ -53,7 +53,7 @@ def draw_agent_card_by_metric(agent_name, metric):
         styles={
             "card": {
                 "width": "100%",
-                "height": "500px"
+                "height": "600px"
                     }
                 }
         )

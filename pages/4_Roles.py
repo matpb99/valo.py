@@ -100,7 +100,7 @@ def draw_agent_rol_card_by_times_played(role_name):
         styles={
             "card": {
                 "width": "100%",
-                "height": "400px"
+                "height": "600px"
                     }
                 }
         )
