@@ -52,7 +52,7 @@ def draw_player_rol_card_by_metric(role_name, metric):
                     FROM test_data
                     WHERE Role=="{}" 
                     GROUP BY Name
-                    HAVING COUNT(Role)>=4
+                    HAVING COUNT(Role)>=5
                     ORDER BY AVG({}) DESC
                     LIMIT 3;""".format(metric, metric, role_name, metric)
 
@@ -60,7 +60,7 @@ def draw_player_rol_card_by_metric(role_name, metric):
 
     player, value = df_data["Name"][0], df_data[metric][0]
 
-    text = [str(value) + " {}".format(metric), "{}{} in All VCTs ".format(prefix, metric), "Played at least 4 maps"]
+    text = [str(value) + " {}".format(metric), "{}{} in All VCTs ".format(prefix, metric), "Played at least 5 maps"]
     title = str(player).capitalize()
 
     card(

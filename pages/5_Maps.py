@@ -47,7 +47,19 @@ def draw_agent_map_composition(map_name):
         for col in col_list:
             agent, value = df_data["Agent"][aux], df_data["Times"][aux]
             title = str(agent).capitalize()
-            text = ["{} Times Played in {} All VCTs".format(value, map_name.capitalize())]
+            text = "{} Times Played in {} All VCTs".format(value, map_name.capitalize())
+
+            sql_query = """SELECT Name, COUNT(Agent) AS MapsPlayed, ROUND(AVG(Rating),2) AS Rating, Team
+                    FROM test_data
+                    WHERE Agent=="{}" AND Map == "{}"
+                    GROUP BY Name
+                    HAVING COUNT(Agent)>=2
+                    ORDER BY AVG(Rating) DESC
+                    LIMIT 3;""".format(agent, map_name)
+
+            df_data_player = pd.read_sql(sql_query, conn)
+
+            player, rating_value = df_data_player["Name"][0], df_data_player["Rating"][0]
             
             with col:
                 card(
@@ -61,9 +73,22 @@ def draw_agent_map_composition(map_name):
                                 }
                             }
                     )
+                
+                card(
+                    title = str(player).capitalize(),
+                    text = ["{} Rating".format(rating_value), "Most Average Rating in {} Playing {} in All VCTs".format(map_name, agent.capitalize()), " " ,"Played at least 2 Times {}".format(map_name)],
+                    image = load_image(player, "players"),
+                    styles={
+                        "card": {
+                            "width": "100%",
+                            "height": "400px"
+                                }
+                            }
+                    )
+                
+                st.dataframe(df_data_player.head(5), hide_index=True, use_container_width=True)
             aux+=1
 
-        st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
 players_maps_data_df, last_update = init_data()
