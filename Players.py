@@ -135,7 +135,7 @@ conn = init_conn(players_maps_data_df)
 
 with st.sidebar:
     st.title("Categories")
-    st.markdown("[Top Players Overall :sunglasses:](#276f5bca)")
+    st.markdown("[Top Players Overall :sunglasses:](#top-players-overall)")
     st.markdown("[Top Players in One Match](#top-players-in-one-match)")
     st.markdown("[Top Players in One Single Map](#top-players-in-one-single-map)")
     
