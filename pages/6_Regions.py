@@ -8,8 +8,8 @@ from sqlite3 import connect
 
 def init_data():
     players_maps_data_df = pd.read_csv("player_data_by_map.csv")
-    with open("last_update.txt", "r") as archivo:
-        last_update = archivo.read()
+    last_update = str(players_maps_data_df.sort_values(by="DateStandar", ascending=False  ,ignore_index=True)["DateStandar"][0])
+    last_update = last_update.split()[0]
 
     return players_maps_data_df, last_update
 
