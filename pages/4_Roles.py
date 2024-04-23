@@ -116,6 +116,11 @@ st.header('Valo.py', divider='blue')
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 st.title("Top Roles")
 
+with st.sidebar:
+    st.title("Categories")
+    st.markdown("[Top Roles](#top-roles)")
+    st.markdown("[Most Played](#most-played)")
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:

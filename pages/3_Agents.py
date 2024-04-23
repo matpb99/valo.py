@@ -46,6 +46,8 @@ def draw_agent_card_by_metric(agent_name, metric):
     text = [str(value) + " {}".format(metric), "Best {} by {}{} in All VCTs ".format(agent_name.capitalize(), prefix, metric), "Played at least 3 maps"]
     title = str(player).capitalize()
 
+    st.header(agent_name.capitalize())
+
     card(
         title = title,
         text = text,
@@ -68,6 +70,30 @@ conn = init_conn(players_maps_data_df)
 st.header('Valo.py', divider='blue')
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 st.title("Top Agents")
+
+with st.sidebar:
+    st.title("Categories")
+    st.markdown("[Top Agents](#top-agents)")
+    st.markdown("[Brimstone](#brimstone)")
+    st.markdown("[Viper](#viper)")
+    st.markdown("[Omen](#omen)")
+    st.markdown("[Killjoy](#killjoy)")
+    st.markdown("[Cypher](#cypher)")
+    st.markdown("[Sova](#sova)")
+    st.markdown("[Sage](#sage)")
+    st.markdown("[Phoenix](#phoenix)")
+    st.markdown("[Jett](#jett)")
+    st.markdown("[Raze](#raze)")
+    st.markdown("[Breach](#breach)")
+    st.markdown("[Skye](#skye)")
+    st.markdown("[Yoru](#yoru)")
+    st.markdown("[Kayo](#kayo)")
+    st.markdown("[Chamber](#chamber)")
+    st.markdown("[Fade](#fade)")
+    st.markdown("[Harbor](#harbor)")
+    st.markdown("[Gekko](#gekko)")
+    st.markdown("[Neon](#neon)")
+
 
 col1, col2, col3, col4 = st.columns(4)
 

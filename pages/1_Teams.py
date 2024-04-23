@@ -115,6 +115,11 @@ st.header('Valo.py', divider='blue')
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 st.title("Top Teams Overall")
 
+with st.sidebar:
+    st.title("Categories")
+    st.markdown("[Top Teams Overall](#top-teams-overall)")
+    st.markdown("[Top Teams in One Single Map](#top-teams-in-one-single-map)")
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:

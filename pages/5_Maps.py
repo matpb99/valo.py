@@ -96,6 +96,17 @@ conn = init_conn(players_maps_data_df)
 st.header('Valo.py', divider='blue')
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 
+with st.sidebar:
+    st.title("Categories")
+    st.markdown("[Top Composition By Maps](#top-composition-by-maps)")
+    st.markdown("[Sunset](#sunset)")
+    st.markdown("[Lotus](#lotus)")
+    st.markdown("[Breeze](#breeze)")
+    st.markdown("[Icebox](#icebox)")
+    st.markdown("[Bind](#bind)")
+    st.markdown("[Split](#split)")
+    st.markdown("[Ascent](#ascent)")
+
 st.title("Top Composition By Maps")
 
 draw_agent_map_composition("Sunset")

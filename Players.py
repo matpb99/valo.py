@@ -133,16 +133,16 @@ st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title =
 players_maps_data_df, last_update = init_data()
 conn = init_conn(players_maps_data_df)
 
+st.header('Valo.py', divider='blue')
+st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] :orange[[Under Developing]]")
+st.subheader("_Last Update:_ :green[{}]".format(last_update))
+st.title("Top Players Overall :sunglasses:")
+
 with st.sidebar:
     st.title("Categories")
     st.markdown("[Top Players Overall :sunglasses:](#top-players-overall)")
     st.markdown("[Top Players in One Match](#top-players-in-one-match)")
     st.markdown("[Top Players in One Single Map](#top-players-in-one-single-map)")
-    
-st.header('Valo.py', divider='blue')
-st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] :orange[[Under Developing]]")
-st.subheader("_Last Update:_ :green[{}]".format(last_update))
-st.title("Top Players Overall :sunglasses:")
 
 col1, col2, col3, col4 = st.columns(4)
 

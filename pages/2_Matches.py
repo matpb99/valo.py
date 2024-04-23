@@ -87,6 +87,10 @@ st.header('Valo.py', divider='blue')
 st.subheader("_Last Update:_ :green[{}]".format(last_update))
 st.title("Top Matches")
 
+with st.sidebar:
+    st.title("Categories")
+    st.markdown("[Top Matches](#top-matches)")
+
 col1, col2 = st.columns(2)
 
 with col1:
