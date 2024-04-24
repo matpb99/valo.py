@@ -32,7 +32,7 @@ def draw_player_card_by_metric(metric):
     else:
         round_value = 2
 
-    sql_query = """SELECT Name, ROUND(AVG({}),{}) AS {}, Team
+    sql_query = """SELECT Name, ROUND(AVG({}),{}) AS {}, COUNT(Name) as MapsPlayed, Team
                     FROM test_data
                     GROUP BY Name
                     HAVING COUNT(Name)>5

@@ -34,7 +34,7 @@ def draw_team_card_by_metric(metric):
     else:
         round_value = 2
 
-    sql_query = """SELECT Team, ROUND(AVG({}),{}) AS {}
+    sql_query = """SELECT Team, ROUND(AVG({}),{}) AS {}, COUNT(DISTINCT(TeamMapKey)) AS MapsPlayed
                     FROM test_data
                     GROUP BY Team
                     ORDER BY AVG({}) DESC
