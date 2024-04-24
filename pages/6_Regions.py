@@ -88,7 +88,3 @@ with col3:
         st.header("Most Intense League")
         draw_region_card_by_metric("Kills")
 
-with col4:
-    with st.container(border=True):
-        st.header("Most Agressive League")
-        draw_region_card_by_metric("FirstKills")
