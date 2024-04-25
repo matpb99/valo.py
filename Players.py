@@ -130,142 +130,147 @@ def draw_player_map_card_by_metric(metric):
     st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
-st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
-players_maps_data_df, last_update = init_data()
-conn = init_conn(players_maps_data_df)
 
-st.header('Valo.py', divider='blue')
-st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] :orange[[Under Developing]]")
-st.subheader("_Last Update:_ :green[{}]".format(last_update))
-st.title("Top Players Overall :sunglasses:")
+if __name__ == '__main__':
+    st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
+    players_maps_data_df, last_update = init_data()
+    conn = init_conn(players_maps_data_df)
 
-with st.sidebar:
-    st.title("Categories")
-    st.markdown("[Top Players Overall :sunglasses:](#276f5bca)")
-    st.markdown("[Top Players in One Match](#top-players-in-one-match)")
-    st.markdown("[Top Players in One Single Map](#top-players-in-one-single-map)")
+    st.session_state["last_update"] = last_update
+    st.session_state["player_data"] = players_maps_data_df
 
-col1, col2, col3, col4 = st.columns(4)
+    st.header('Valo.py', divider='blue')
+    st.subheader("_Website_ :blue[to know all about competitive Valorant] :red[road to Champions 2024] :orange[[Under Developing]]")
+    st.subheader("_Last Update:_ :green[{}]".format(last_update))
+    st.title("Top Players Overall :sunglasses:")
 
-with col1:
-    with st.container(border=True):
-        st.header(":blue[MVP Overall]")
-        draw_player_card_by_metric("Rating")
+    with st.sidebar:
+        st.title("Categories")
+        st.markdown("[Top Players Overall :sunglasses:](#276f5bca)")
+        st.markdown("[Top Players in One Match](#top-players-in-one-match)")
+        st.markdown("[Top Players in One Single Map](#top-players-in-one-single-map)")
 
-with col2:
-    with st.container(border=True):
-        st.header(":blue[Combat Specialist]")
-        draw_player_card_by_metric("ACS")
+    col1, col2, col3, col4 = st.columns(4)
 
-with col3:
-    with st.container(border=True):
-        st.header(":blue[Elimination Expert]")
-        draw_player_card_by_metric("Kills")
+    with col1:
+        with st.container(border=True):
+            st.header(":blue[MVP Overall]")
+            draw_player_card_by_metric("Rating")
 
-with col4:
-    with st.container(border=True):
-        st.header(":blue[Support Master]") 
-        draw_player_card_by_metric("Assists")
+    with col2:
+        with st.container(border=True):
+            st.header(":blue[Combat Specialist]")
+            draw_player_card_by_metric("ACS")
 
-col5, col6, col7, col8 = st.columns(4)
+    with col3:
+        with st.container(border=True):
+            st.header(":blue[Elimination Expert]")
+            draw_player_card_by_metric("Kills")
 
-with col5:
-    with st.container(border=True):
-        st.header(":blue[Team Architect]") 
-        draw_player_card_by_metric("Kast")
+    with col4:
+        with st.container(border=True):
+            st.header(":blue[Support Master]") 
+            draw_player_card_by_metric("Assists")
 
-with col6:
-    with st.container(border=True):
-        st.header(":blue[Consistent Impact]") 
-        draw_player_card_by_metric("ADR")
-    
-with col7:
-    with st.container(border=True):
-        st.header(":blue[Sharpshooting Champion]") 
-        draw_player_card_by_metric("HSRate")
+    col5, col6, col7, col8 = st.columns(4)
 
-with col8:
-    with st.container(border=True):
-        st.header(":blue[Aggressive Strategist]") 
-        draw_player_card_by_metric("FirstKills")
+    with col5:
+        with st.container(border=True):
+            st.header(":blue[Team Architect]") 
+            draw_player_card_by_metric("Kast")
 
-
-st.title("Top Players in One Match")
-
-col9, col10, col11, col12 = st.columns(4)
-
-with col9:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("Rating")
-
-with col10:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("ACS")
-
-with col11:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("Kills")
-
-with col12:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("Assists")
-
-
-col13, col14, col15, col16 = st.columns(4)
-
-with col13:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("Kast")
-
-with col14:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("ADR")
-
-with col15:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("HSRate")
-
-with col16:
-    with st.container(border=True):
-        draw_player_match_card_by_metric("FirstKills")
-
-st.title("Top Players in One Single Map")
-
-col17, col18, col19, col20 = st.columns(4)
-
-with col17:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("Rating")
-
-with col18:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("ACS")    
-
-with col19:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("Kills")
-
-with col20:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("Assists")
-
-col21, col22, col23, col24 = st.columns(4)
-
-with col21:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("Kast")
-
-with col22:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("ADR")
-
-with col23:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("HSRate")
-
-with col24:
-    with st.container(border=True):
-        draw_player_map_card_by_metric("FirstKills")
+    with col6:
+        with st.container(border=True):
+            st.header(":blue[Consistent Impact]") 
+            draw_player_card_by_metric("ADR")
         
-st.title("Placeholder _New Statistics_")
+    with col7:
+        with st.container(border=True):
+            st.header(":blue[Sharpshooting Champion]") 
+            draw_player_card_by_metric("HSRate")
+
+    with col8:
+        with st.container(border=True):
+            st.header(":blue[Aggressive Strategist]") 
+            draw_player_card_by_metric("FirstKills")
+
+
+    st.title("Top Players in One Match")
+
+    col9, col10, col11, col12 = st.columns(4)
+
+    with col9:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("Rating")
+
+    with col10:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("ACS")
+
+    with col11:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("Kills")
+
+    with col12:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("Assists")
+
+
+    col13, col14, col15, col16 = st.columns(4)
+
+    with col13:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("Kast")
+
+    with col14:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("ADR")
+
+    with col15:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("HSRate")
+
+    with col16:
+        with st.container(border=True):
+            draw_player_match_card_by_metric("FirstKills")
+
+    st.title("Top Players in One Single Map")
+
+    col17, col18, col19, col20 = st.columns(4)
+
+    with col17:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("Rating")
+
+    with col18:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("ACS")    
+
+    with col19:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("Kills")
+
+    with col20:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("Assists")
+
+    col21, col22, col23, col24 = st.columns(4)
+
+    with col21:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("Kast")
+
+    with col22:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("ADR")
+
+    with col23:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("HSRate")
+
+    with col24:
+        with st.container(border=True):
+            draw_player_map_card_by_metric("FirstKills")
+            
+    st.title("Placeholder _New Statistics_")
 

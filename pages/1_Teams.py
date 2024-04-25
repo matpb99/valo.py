@@ -6,13 +6,6 @@ import plotly.express as px
 from streamlit_card import card
 from sqlite3 import connect
 
-def init_data():
-    players_maps_data_df = pd.read_csv("player_data_by_map.csv")
-    last_update = str(players_maps_data_df.sort_values(by="DateStandar", ascending=False  ,ignore_index=True)["DateStandar"][0])
-    last_update = last_update.split()[0]
-
-    return players_maps_data_df, last_update
-
 def init_conn(df):
     conn = connect(':memory:')
     df.to_sql(name='test_data', con=conn)
@@ -27,10 +20,7 @@ def load_image(filename, folder):
  
 def draw_team_card_by_metric(metric):
 
-    if metric == "Rating":
-        round_value = 3
-        multiplier = 1
-    elif metric == "HSRate" or metric == "Kast":
+    if metric == "Rating" or metric == "HSRate" or metric == "Kast":
         round_value = 3
         multiplier = 1
     elif metric == "ADR" or metric == "ACS":
@@ -114,7 +104,8 @@ def draw_team_map_card_by_metric(metric):
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
-players_maps_data_df, last_update = init_data()
+
+players_maps_data_df, last_update = st.session_state["player_data"], st.session_state["last_update"]
 conn = init_conn(players_maps_data_df)
 
 st.header('Valo.py', divider='blue')
