@@ -29,16 +29,19 @@ def draw_team_card_by_metric(metric):
 
     if metric == "Rating":
         round_value = 3
+        multiplier = 1
     elif metric == "HSRate" or metric == "Kast":
         round_value = 3
+        multiplier = 1
     else:
         round_value = 2
+        multiplier = 5
 
-    sql_query = """SELECT Team, ROUND(AVG({}),{}) AS {}, COUNT(DISTINCT(TeamMapKey)) AS MapsPlayed
+    sql_query = """SELECT Team, ROUND(AVG({})*{},{}) AS {}, COUNT(DISTINCT(TeamMapKey)) AS MapsPlayed
                     FROM test_data
                     GROUP BY Team
                     ORDER BY AVG({}) DESC
-                    LIMIT 5;""".format(metric, round_value, metric, metric)
+                    LIMIT 5;""".format(metric, multiplier, round_value, metric, metric)
     
     df_data = pd.read_sql(sql_query, conn)
 
