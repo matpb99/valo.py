@@ -33,6 +33,9 @@ def draw_team_card_by_metric(metric):
     elif metric == "HSRate" or metric == "Kast":
         round_value = 3
         multiplier = 1
+    elif metric == "ADR" or metric == "ACS":
+        round_value = 2
+        multiplier = 1
     else:
         round_value = 2
         multiplier = 5
