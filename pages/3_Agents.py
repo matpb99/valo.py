@@ -44,7 +44,7 @@ def draw_agent_card_by_metric(agent_name, metric):
 
     player, value = df_data["Name"][0], df_data[metric][0]
     text = [str(value) + " {}".format(metric), "Best {} by {}{} in All VCTs ".format(agent_name.capitalize(), prefix, metric), "Played at least 3 maps"]
-    title = str(player).capitalize()
+    title = str(player)
 
     st.header(agent_name.capitalize())
 

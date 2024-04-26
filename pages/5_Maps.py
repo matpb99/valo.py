@@ -17,7 +17,8 @@ def init_conn(df):
     conn = connect(':memory:')
     df.to_sql(name='test_data', con=conn)
     return conn
-        
+
+@st.cache_data        
 def load_image(filename, folder):
     with open("./{}/{}.jpg".format(folder.lower(), filename.lower()), "rb") as f:
         data = f.read()
@@ -75,7 +76,7 @@ def draw_agent_map_composition(map_name):
                     )
                 
                 card(
-                    title = str(player).capitalize(),
+                    title = str(player),
                     text = ["{} Rating".format(rating_value), "Most Average Rating in {} Playing {} in All VCTs".format(map_name, agent.capitalize()), " " ,"Played at least 2 Times {}".format(map_name)],
                     image = load_image(player, "players"),
                     styles={
