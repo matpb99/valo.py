@@ -44,7 +44,7 @@ def draw_player_card_by_metric(metric):
     player, value = df_data["Name"][0], df_data[metric][0]
 
     text = [str(value) + " {}".format(metric), "Most Average {} per Map Played in All VCTs".format(metric)]
-    title = str(player).capitalize()
+    title = str(player)
 
     card(
         title = title,
@@ -85,7 +85,7 @@ def draw_player_match_card_by_metric(metric):
 
     player, value, matchteams = df_data["Name"][0], df_data[metric][0], df_data["MatchTeams"][0]
     text = [str(value) +" {}".format(metric), "Most {} in One Match in All VCTs".format(metric), matchteams]
-    title = str(player).capitalize()
+    title = str(player)
 
     card(
         title = title,
@@ -113,7 +113,7 @@ def draw_player_map_card_by_metric(metric):
 
     player, value, map_name, matchteams =  df_data["Name"][0], df_data[metric][0], df_data["Map"][0], df_data["MatchTeams"][0]
     text = [str(value) +" {}".format(metric), "Most {} in One Single Map in All VCTs".format(metric), map_name, matchteams]
-    title = str(player).capitalize()
+    title = str(player)
 
     card(
         title = title,
