@@ -84,7 +84,7 @@ def draw_agent_rol_card_by_times_played(role_name):
                     WHERE Role=="{}" 
                     GROUP BY Agent
                     ORDER BY COUNT(Agent) DESC
-                    LIMIT 5;""".format(role_name)
+                    ;""".format(role_name)
 
     df_data = pd.read_sql(sql_query, conn)
 
