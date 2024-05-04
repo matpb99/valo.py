@@ -54,7 +54,7 @@ def draw_agent_map_composition(map_name):
                     FROM test_data
                     WHERE Agent=="{}" AND Map == "{}"
                     GROUP BY Name
-                    HAVING COUNT(Agent)>=2
+                    HAVING COUNT(Agent)>=3
                     ORDER BY AVG(Rating) DESC
                     LIMIT 3;""".format(agent, map_name)
 
@@ -77,7 +77,7 @@ def draw_agent_map_composition(map_name):
                 
                 card(
                     title = str(player),
-                    text = ["{} Rating".format(rating_value), "Most Average Rating in {} Playing {} in All VCTs".format(map_name, agent.capitalize()), " " ,"Played at least 2 Times {}".format(map_name)],
+                    text = ["{} Rating".format(rating_value), "Most Average Rating in {} Playing {} in All VCTs".format(map_name, agent.capitalize()), " " ,"Played at least 3 Times {}".format(map_name)],
                     image = load_image(player, "players"),
                     styles={
                         "card": {
