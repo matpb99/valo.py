@@ -36,14 +36,14 @@ def draw_agent_card_by_metric(agent_name, metric):
                     FROM test_data
                     WHERE Agent=="{}" 
                     GROUP BY Name
-                    HAVING COUNT(Agent)>=3
+                    HAVING COUNT(Agent)>=4
                     ORDER BY AVG({}) DESC
                     LIMIT 3;""".format(metric, metric, agent_name, metric)
 
     df_data = pd.read_sql(sql_query, conn)
 
     player, value = df_data["Name"][0], df_data[metric][0]
-    text = [str(value) + " {}".format(metric), "Best {} by {}{} in All VCTs ".format(agent_name.capitalize(), prefix, metric), "Played at least 3 maps"]
+    text = [str(value) + " {}".format(metric), "Best {} by {}{} in All VCTs ".format(agent_name.capitalize(), prefix, metric), "Played at least 4 maps"]
     title = str(player)
 
     st.header(agent_name.capitalize())

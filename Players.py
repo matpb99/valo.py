@@ -130,7 +130,6 @@ def draw_player_map_card_by_metric(metric):
     st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
-
 if __name__ == '__main__':
     st.set_page_config(layout = "wide", initial_sidebar_state = "auto", page_title = "Valo.py")
     players_maps_data_df, last_update = init_data()
@@ -194,7 +193,6 @@ if __name__ == '__main__':
             st.header(":blue[Aggressive Strategist]") 
             draw_player_card_by_metric("FirstKills")
 
-
     st.title("Top Players in One Match")
 
     col9, col10, col11, col12 = st.columns(4)
@@ -214,7 +212,6 @@ if __name__ == '__main__':
     with col12:
         with st.container(border=True):
             draw_player_match_card_by_metric("Assists")
-
 
     col13, col14, col15, col16 = st.columns(4)
 
