@@ -99,7 +99,7 @@ def draw_player_match_card_by_metric(metric):
                 }
                             )
 
-    st.subheader("Top 5 Ranking aa")
+    st.subheader("Top 5 Ranking")
     st.dataframe(df_data.head(5), hide_index=True, use_container_width=True)
 
 def draw_player_map_card_by_metric(metric):
