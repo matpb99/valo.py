@@ -39,7 +39,7 @@ def draw_player_rol_card_by_metric(role_name, metric):
     elif role_name == "controller":
         color = "orange"
     else:
-        color = "green"
+        color = "green" 
 
     st.header(":{}[Best {}]".format(color, role_name.capitalize()))
 
